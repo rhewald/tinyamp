@@ -1,3 +1,5 @@
+import json
+import requests
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 
@@ -9,20 +11,30 @@ with sync_playwright() as p:
 
     html = page.content()
     soup = BeautifulSoup(html, "html.parser")
+    event_elements = soup.select("#event-list .event-item")
 
-    events = soup.select("#event-list .event-item")  # Adjust this selector as needed
-
-    for event in events:
+    events = []
+    for event in event_elements:
         date = event.select_one(".event-date, .date")
         title = event.select_one(".event-title, h2")
         time = event.select_one(".event-time, .time")
         link = event.select_one("a")["href"] if event.select_one("a") else None
 
-        print({
+        events.append({
             "date": date.get_text(strip=True) if date else None,
             "artist": title.get_text(strip=True) if title else None,
             "time": time.get_text(strip=True) if time else None,
-            "link": link
+            "venue": "The Chapel",
+            "link": link if link and link.startswith("http") else f"https://thechapelsf.com{link}" if link else None
         })
 
     browser.close()
+
+# Optional: print to console for debugging
+print(json.dumps(events, indent=2))
+
+# Send to backend API
+response = requests.post("http://localhost:5000/api/ingest", json=events)
+print("POST status:", response.status_code)
+print("Response:", response.text)
+

@@ -18,3 +18,5 @@ app.use('/api/events', eventRoutes);
 app.listen(5000, () => {
   console.log('Server is running on port 5000');
 });
+const ingestRoutes = require("./routes/ingest");
+app.use("/api", ingestRoutes);

@@ -15,3 +15,14 @@ router.get('/', async (req, res) => {
 });
 
 module.exports = router;
+
+// GET /api/events/test
+router.get('/test', async (req, res) => {
+  try {
+    const events = await Event.find({ venue: "The Chapel" }).limit(10);
+    res.json(events);
+  } catch (err) {
+    console.error("Test fetch error:", err);
+    res.status(500).json({ message: "Could not fetch events" });
+  }
+});

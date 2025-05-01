@@ -1,4 +1,4 @@
-// Puppeteer-Based Scraper for The Chapel (/calendar)
+// Puppeteer-Based Scraper for The Chapel (/music/)
 const puppeteer = require('puppeteer');
 const mongoose = require('mongoose');
 require('dotenv').config({ path: './server/.env' });
@@ -10,7 +10,7 @@ const Event = require('../server/models/Event');
   const page = await browser.newPage();
   await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
 
-  await page.goto('https://thechapelsf.com/calendar/', { waitUntil: 'networkidle2' });
+  await page.goto('https://thechapelsf.com/music/', { waitUntil: 'networkidle2' });
   await page.waitForSelector('div.views-row', { timeout: 30000 });
 
   const events = await page.evaluate(() => {

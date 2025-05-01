@@ -5,14 +5,19 @@ from playwright.sync_api import sync_playwright
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
     page = browser.new_page()
-    page.goto("https://www.theindependentsf.com/", timeout=60000)
-    page.wait_for_load_state("networkidle")
 
-    # Scroll to load events if lazy-loaded
+    try:
+        page.goto("https://www.theindependentsf.com/", timeout=90000, wait_until="domcontentloaded")
+    except Exception as e:
+        print("Initial page load failed:", str(e))
+        browser.close()
+        exit(1)
+
+    # Scroll to help load lazy-loaded content
     page.evaluate("window.scrollBy(0, document.body.scrollHeight)")
     page.wait_for_timeout(2000)
 
-    event_items = page.query_selector_all("li.Component-EventCard")  # Common class name for event blocks
+    event_items = page.query_selector_all("li.Component-EventCard")
     print(f"Found {len(event_items)} events")
 
     events = []
@@ -24,7 +29,7 @@ with sync_playwright() as p:
         events.append({
             "artist": title_el.inner_text().strip() if title_el else None,
             "date": date_el.inner_text().strip() if date_el else None,
-            "time": None,  # Not shown on main page
+            "time": None,  # Time is not on the main page
             "venue": "The Independent",
             "link": link_el.get_attribute("href") if link_el else None
         })
@@ -33,7 +38,7 @@ with sync_playwright() as p:
 
 print(json.dumps(events, indent=2))
 
-# Optional POST to your ingest API
+# Optional POST
 try:
     response = requests.post("http://localhost:5000/api/ingest", json=events)
     print("POST status:", response.status_code)

@@ -1,6 +1,5 @@
 from playwright.sync_api import sync_playwright
 import requests
-import time
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
@@ -8,7 +7,7 @@ with sync_playwright() as p:
     print("⏳ Loading page...")
     page.goto("https://www.theindependentsf.com/", timeout=60000)
 
-    # Close popup if it appears
+    # Close popup if it exists
     try:
         popup_close = page.query_selector("div#om-mnuwxyw8zcuetb2b-holder .om-close")
         if popup_close:
@@ -31,21 +30,32 @@ with sync_playwright() as p:
         artist_el = block.query_selector("p.headliners")
         date_el = block.query_selector("p.fs-18.bold.mt-1r.date")
         time_el = block.query_selector("p.doortime-showtime")
-        link_el = block.query_selector("a[href*='/event/']")
+        link_el = block.query_selector("a")
+
+        artist = artist_el.inner_text().strip() if artist_el else None
+        date = date_el.inner_text().strip() if date_el else None
+        time = time_el.inner_text().strip() if time_el else None
+        link = link_el.get_attribute("href") if link_el else None
+
+        if link and not link.startswith("http"):
+            link = "https://www.theindependentsf.com" + link
 
         events.append({
-            "artist": artist_el.inner_text().strip() if artist_el else None,
-            "date": date_el.inner_text().strip() if date_el else None,
-            "time": time_el.inner_text().strip() if time_el else None,
+            "artist": artist,
+            "date": date,
+            "time": time,
             "venue": "The Independent",
-            "link": link_el.get_attribute("href") if link_el else None
+            "link": link
         })
 
     print(events)
 
-    # Optionally post to backend
-    response = requests.post("http://localhost:3001/api/events", json=events)
-    print(f"POST status: {response.status_code}")
-    print(f"Response: {response.text}")
+    # Post to backend if reachable
+    try:
+        response = requests.post("http://localhost:3001/api/events", json=events)
+        print(f"POST status: {response.status_code}")
+        print(f"Response: {response.text}")
+    except requests.exceptions.ConnectionError:
+        print("❌ Could not connect to localhost:3001 — skipping POST.")
 
     browser.close()

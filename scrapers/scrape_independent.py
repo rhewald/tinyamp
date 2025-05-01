@@ -1,18 +1,6 @@
 from playwright.sync_api import sync_playwright
 import requests
-from datetime import datetime
-
-def normalize_date(short_date):
-    """Convert dates like '5.1' to '2025-05-01'."""
-    try:
-        month, day = map(int, short_date.strip().split('.'))
-        year = datetime.now().year
-        today = datetime.today()
-        event_date = datetime(year=year, month=month, day=day)
-        # If somehow the event date has already passed, still assume current year (no wraparound)
-        return event_date.strftime("%Y-%m-%d")
-    except:
-        return None
+from scrapers.scraper_utils import normalize_date, normalize_time
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
@@ -46,10 +34,11 @@ with sync_playwright() as p:
 
         artist = artist_el.inner_text().strip() if artist_el else None
         short_date = date_el.inner_text().strip() if date_el else None
-        time = time_el.inner_text().strip() if time_el else None
+        raw_time = time_el.inner_text().strip() if time_el else None
         link = link_el.get_attribute("href") if link_el else None
 
         date = normalize_date(short_date)
+        time = normalize_time(raw_time)
 
         if link and not link.startswith("http"):
             link = "https://www.theindependentsf.com" + link

@@ -9,7 +9,7 @@ with sync_playwright() as p:
     page.wait_for_load_state("networkidle")
 
     # Get events directly from the live rendered page using JS handles
-    event_items = page.query_selector_all(".event-item")
+    event_items = page.query_selector_all("div.show")
 
     events = []
     for item in event_items:

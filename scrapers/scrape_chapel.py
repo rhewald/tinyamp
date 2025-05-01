@@ -3,20 +3,40 @@ import requests
 import time
 from playwright.sync_api import sync_playwright
 
+def auto_scroll(page):
+    page.evaluate("""
+        async () => {
+            await new Promise((resolve) => {
+                let totalHeight = 0;
+                const distance = 300;
+                const timer = setInterval(() => {
+                    window.scrollBy(0, distance);
+                    totalHeight += distance;
+
+                    if (totalHeight >= document.body.scrollHeight) {
+                        clearInterval(timer);
+                        resolve();
+                    }
+                }, 200);
+            });
+        }
+    """)
+
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
     page = browser.new_page()
     page.goto("https://thechapelsf.com/music/", timeout=60000)
     page.wait_for_load_state("networkidle")
-    time.sleep(5)  # <-- Extra wait for JS-rendered content
+    auto_scroll(page)
+    time.sleep(2)  # wait briefly for JS-inserted content
 
-    # ✅ Save the rendered HTML to inspect what we actually got
+    # Save rendered HTML
     with open("chapel_rendered_debug.html", "w") as f:
         f.write(page.content())
 
-    # ✅ Try selector again after JS wait
+    # Parse shows after scroll
     event_items = page.query_selector_all("div.show")
-    print(f"Found {len(event_items)} events")  # Debug tip
+    print(f"Found {len(event_items)} events")
 
     events = []
     for item in event_items:
@@ -35,10 +55,10 @@ with sync_playwright() as p:
 
     browser.close()
 
-# ✅ Show parsed results
+# Output
 print(json.dumps(events, indent=2))
 
-# Optional POST to ingest API
+# Post to your API
 try:
     response = requests.post("http://localhost:5000/api/ingest", json=events)
     print("POST status:", response.status_code)

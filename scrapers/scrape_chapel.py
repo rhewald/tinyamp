@@ -8,8 +8,9 @@ with sync_playwright() as p:
     page.goto("https://thechapelsf.com/music/", timeout=60000)
     page.wait_for_load_state("networkidle")
 
-    # Get events directly from the live rendered page using JS handles
+    # ✅ FIXED selector
     event_items = page.query_selector_all("div.show")
+    print(f"Found {len(event_items)} events")  # ✅ Debug tip
 
     events = []
     for item in event_items:
@@ -28,6 +29,7 @@ with sync_playwright() as p:
 
     browser.close()
 
+# ✅ Show parsed results
 print(json.dumps(events, indent=2))
 
 # OPTIONAL: post to your ingest API

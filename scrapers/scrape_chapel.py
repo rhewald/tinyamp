@@ -16,13 +16,22 @@ with sync_playwright() as p:
     for item in event_items:
         title_el = item.query_selector("p.title a")
         date_el = item.query_selector("p.date")
-        time_el = item.query_selector("p.doortime.showtime") or item.query_selector("p.doortime") or item.query_selector("p.time")
+
+        # Updated time extraction logic
+        time_el = None
+        paragraphs = item.query_selector_all("p")
+        for p in paragraphs:
+            text = p.inner_text().strip()
+            if "Doors at" in text or "Show at" in text:
+                time_el = text
+                break
+
         link_el = title_el or item.query_selector("a")
 
         events.append({
             "artist": title_el.inner_text().strip() if title_el else None,
             "date": date_el.inner_text().strip() if date_el else None,
-            "time": time_el.inner_text().strip() if time_el else None,
+            "time": time_el,
             "venue": "The Chapel",
             "link": link_el.get_attribute("href") if link_el else None
         })

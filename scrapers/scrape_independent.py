@@ -1,6 +1,6 @@
 from playwright.sync_api import sync_playwright
 import requests
-from .scraper_utils import normalize_date, normalize_time
+from scrapers.scraper_utils import normalize_date, normalize_time
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)

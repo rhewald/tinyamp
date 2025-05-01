@@ -27,15 +27,12 @@ with sync_playwright() as p:
 
     for block in event_blocks:
         title_el = block.query_selector("div.tw-name a")
-        date_dayname_el = block.query_selector("div.tw-event-date-dayname")
-        date_daynum_el = block.query_selector("div.tw-event-date-daynumber")
+        date_el = block.query_selector("span.tw-event-date")
         time_el = block.query_selector("div.tw-date-time span.tw-event-time-complete")
 
         artist = title_el.inner_text().strip() if title_el else None
         link = title_el.get_attribute("href") if title_el else None
-        dayname = date_dayname_el.inner_text().strip() if date_dayname_el else ""
-        daynum = date_daynum_el.inner_text().strip() if date_daynum_el else ""
-        date = f"{dayname} {daynum}".strip() if (dayname or daynum) else None
+        date = date_el.inner_text().strip() if date_el else None
         time = time_el.inner_text().strip() if time_el else None
 
         if link and not link.startswith("http"):
@@ -43,7 +40,7 @@ with sync_playwright() as p:
 
         events.append({
             "artist": artist,
-            "date": date,
+            "date": date,  # now just "5.1"
             "time": time,
             "venue": "The Independent",
             "link": link

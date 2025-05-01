@@ -1,7 +1,7 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 const mongoose = require('mongoose');
-require('dotenv').config();
+require('dotenv').config({ path: './server/.env' });
 const Event = require('../server/models/Event');
 
 (async () => {

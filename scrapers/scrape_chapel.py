@@ -16,7 +16,7 @@ with sync_playwright() as p:
     for item in event_items:
         title_el = item.query_selector("p.title a")
         date_el = item.query_selector("p.date")
-        time_el = item.query_selector("p.doortime") or item.query_selector("p.time")
+        time_el = item.query_selector("p.doortime.showtime") or item.query_selector("p.doortime") or item.query_selector("p.time")
         link_el = title_el or item.query_selector("a")
 
         events.append({

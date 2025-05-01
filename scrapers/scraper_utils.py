@@ -28,3 +28,36 @@ def normalize_time(raw_time):
         return f"SHOW: {time_str}"
     except:
         return raw_time
+
+from pymongo import MongoClient
+
+def insert_unique_events(events, db_name="tinyamp", collection_name="events", uri="mongodb://localhost:27017"):
+    client = MongoClient(uri)
+    db = client[db_name]
+    collection = db[collection_name]
+
+    inserted = 0
+    skipped = 0
+
+    for event in events:
+        if not event.get("artist") or not event.get("date") or not event.get("venue"):
+            print("⚠️ Skipping event due to missing artist, date, or venue:", event)
+            continue
+
+        query = {
+            "artist": event["artist"],
+            "date": event["date"],
+            "venue": event["venue"]
+        }
+
+        if collection.find_one(query):
+            print(f"⏭️ Duplicate found, skipping: {event['artist']} @ {event['venue']} on {event['date']}")
+            skipped += 1
+        else:
+            collection.insert_one(event)
+            print(f"✅ Inserted: {event['artist']} @ {event['venue']} on {event['date']}")
+            inserted += 1
+
+    print(f"\nDone. Inserted: {inserted}, Skipped (duplicates): {skipped}")
+    client.close()
+

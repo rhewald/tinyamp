@@ -1,6 +1,5 @@
 from playwright.sync_api import sync_playwright
-import requests
-from scraper_utils import normalize_date, normalize_time
+from scraper_utils import normalize_date, normalize_time, insert_unique_events
 
 def scrape_independent_events():
     with sync_playwright() as p:
@@ -54,13 +53,8 @@ def scrape_independent_events():
 
         print(events)
 
-        # Optional POST to local backend
-        try:
-            response = requests.post("http://localhost:3001/api/events", json=events)
-            print(f"POST status: {response.status_code}")
-            print(f"Response: {response.text}")
-        except requests.exceptions.ConnectionError:
-            print("❌ Could not connect to localhost:3001 — skipping POST.")
+        # Insert into MongoDB with deduplication
+        insert_unique_events(events)
 
         browser.close()
 

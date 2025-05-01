@@ -1,6 +1,6 @@
 from playwright.sync_api import sync_playwright
 import requests
-from scrapers.scraper_utils import normalize_date, normalize_time
+from .scraper_utils import normalize_date, normalize_time
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
@@ -16,7 +16,7 @@ with sync_playwright() as p:
             print("✅ Closed popup.")
         else:
             print("ℹ️ No popup found or already closed.")
-    except:
+    except Exception:
         print("⚠️ Popup close failed (non-blocking).")
 
     print("⏳ Waiting for content to load...")
@@ -33,11 +33,11 @@ with sync_playwright() as p:
         link_el = block.query_selector("a")
 
         artist = artist_el.inner_text().strip() if artist_el else None
-        short_date = date_el.inner_text().strip() if date_el else None
+        raw_date = date_el.inner_text().strip() if date_el else None
         raw_time = time_el.inner_text().strip() if time_el else None
         link = link_el.get_attribute("href") if link_el else None
 
-        date = normalize_date(short_date)
+        date = normalize_date(raw_date)
         time = normalize_time(raw_time)
 
         if link and not link.startswith("http"):

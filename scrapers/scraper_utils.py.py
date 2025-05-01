@@ -2,25 +2,28 @@ from datetime import datetime
 
 def normalize_date(short_date):
     """
-    Converts short dates like '5.1' into full ISO format '2025-05-01'.
-    Assumes all dates are in the current calendar year.
+    Convert date in '5.1' format to ISO 8601 'YYYY-MM-DD'.
+    Assumes all dates are in current year.
     """
     try:
         month, day = map(int, short_date.strip().split('.'))
         year = datetime.now().year
-        return datetime(year=year, month=month, day=day).strftime("%Y-%m-%d")
+        return datetime(year, month, day).strftime('%Y-%m-%d')
     except Exception:
         return None
 
 def normalize_time(raw_time):
     """
-    Normalizes times to US-style format: 'SHOW: 8:00 PM'.
-    Accepts input like '20:00' or already-formatted values.
+    Normalize time strings to 'SHOW: H:MM AM/PM' format.
+    Supports formats like '20:00' or already formatted 'SHOW: 8:00 PM'.
     """
+    if raw_time is None:
+        return None
+    raw_time = raw_time.strip()
+    if raw_time.upper().startswith("SHOW:"):
+        return raw_time  # already normalized
     try:
-        raw_time = raw_time.replace("SHOW:", "").strip()
-        dt_obj = datetime.strptime(raw_time, "%H:%M")
-        return "SHOW: " + dt_obj.strftime("%-I:%M %p")
-    except ValueError:
-        # If already formatted (e.g., 'SHOW: 8:00 PM'), return as-is
-        return raw_time if "SHOW:" in raw_time else f"SHOW: {raw_time}"
+        dt = datetime.strptime(raw_time, "%H:%M")
+        return f"SHOW: {dt.strftime('%-I:%M %p')}"  # e.g. 20:00 → SHOW: 8:00 PM
+    except Exception:
+        return raw_time  # fallback to original if parsing fails

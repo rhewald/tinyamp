@@ -7,7 +7,7 @@ with sync_playwright() as p:
     print("⏳ Loading page...")
     page.goto("https://www.theindependentsf.com/", timeout=60000)
 
-    # Try closing the popup if it appears
+    # Try closing popup
     try:
         popup = page.query_selector("div#om-mnuwxyw8zcuetb2b-holder .om-close")
         if popup:
@@ -26,14 +26,16 @@ with sync_playwright() as p:
     events = []
 
     for block in event_blocks:
-        # Try updated selector for title and link
         title_el = block.query_selector("div.tw-name a")
-        date_el = block.query_selector("p.fs-18.bold.mt-1r.date")
-        time_el = block.query_selector("p.doortime-showtime")
+        date_dayname_el = block.query_selector("div.tw-event-date-dayname")
+        date_daynum_el = block.query_selector("div.tw-event-date-daynumber")
+        time_el = block.query_selector("div.tw-date-time span.tw-event-time-complete")
 
         artist = title_el.inner_text().strip() if title_el else None
         link = title_el.get_attribute("href") if title_el else None
-        date = date_el.inner_text().strip() if date_el else None
+        dayname = date_dayname_el.inner_text().strip() if date_dayname_el else ""
+        daynum = date_daynum_el.inner_text().strip() if date_daynum_el else ""
+        date = f"{dayname} {daynum}".strip() if (dayname or daynum) else None
         time = time_el.inner_text().strip() if time_el else None
 
         if link and not link.startswith("http"):

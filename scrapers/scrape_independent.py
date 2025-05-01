@@ -7,7 +7,7 @@ with sync_playwright() as p:
     page = browser.new_page()
     page.goto("https://www.theindependentsf.com/", timeout=90000)
 
-    # Step 1: Close popup if it appears
+    # Close popup if it appears
     try:
         page.wait_for_selector("text='NO THANKS'", timeout=5000)
         page.click("text='NO THANKS'")
@@ -15,17 +15,19 @@ with sync_playwright() as p:
     except:
         print("ℹ️ No popup found or already closed.")
 
-    # Step 2: Wait for container that holds events
-    page.wait_for_selector("div#tw-upcoming-upcoming-event-list", timeout=15000)
-    event_cards = page.query_selector_all("div#tw-upcoming-upcoming-event-list div.tw-event-item")
+    # Wait until event date elements show up — they are consistent and visible
+    page.wait_for_selector("p.fs-18.bold.mt-1r.date", timeout=15000)
 
-    print(f"Found {len(event_cards)} events")
+    # Grab each event container
+    event_blocks = page.query_selector_all("div.tw-event-item")
+    print(f"Found {len(event_blocks)} events")
+
     events = []
-    for card in event_cards:
-        artist_el = card.query_selector("p.headliners")
-        date_el = card.query_selector("p.date, p.fs-18.bold.mt-1r.date")  # fallback
-        time_el = card.query_selector("p.doortime-showtime")
-        link_el = card.query_selector("a[href*='event']")
+    for block in event_blocks:
+        artist_el = block.query_selector("p.headliners")
+        date_el = block.query_selector("p.fs-18.bold.mt-1r.date")
+        time_el = block.query_selector("p.doortime-showtime")
+        link_el = block.query_selector("p.title a")
 
         events.append({
             "artist": artist_el.inner_text().strip() if artist_el else None,
@@ -37,10 +39,10 @@ with sync_playwright() as p:
 
     browser.close()
 
-# Show result
+# Output
 print(json.dumps(events, indent=2))
 
-# Optional POST
+# POST to backend
 try:
     response = requests.post("http://localhost:5000/api/ingest", json=events)
     print("POST status:", response.status_code)

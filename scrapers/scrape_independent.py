@@ -5,15 +5,8 @@ from playwright.sync_api import sync_playwright
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
     page = browser.new_page()
-
-    try:
-        page.goto("https://www.theindependentsf.com/", timeout=90000, wait_until="domcontentloaded")
-    except Exception as e:
-        print("Initial page load failed:", str(e))
-        browser.close()
-        exit(1)
-
-    page.wait_for_timeout(2000)
+    page.goto("https://www.theindependentsf.com/", timeout=90000, wait_until="domcontentloaded")
+    page.wait_for_timeout(2000)  # Let dynamic content load
 
     event_items = page.query_selector_all("div.tw-event-item")
     print(f"Found {len(event_items)} events")
@@ -21,9 +14,9 @@ with sync_playwright() as p:
     events = []
     for item in event_items:
         artist_el = item.query_selector("img[alt]")
-        date_el = item.query_selector("div.tw-event-date-time > div.date")
-        time_el = item.query_selector("div.tw-event-date-time > div.time")
-        link_el = item.query_selector("div.tw-event-date-time a")
+        date_el = item.query_selector(".tw-event-info .tw-event-date-time .date")
+        time_el = item.query_selector(".tw-event-info .tw-event-date-time .time")
+        link_el = item.query_selector(".tw-event-info .tw-event-date-time a[href]")
 
         events.append({
             "artist": artist_el.get_attribute("alt") if artist_el else None,

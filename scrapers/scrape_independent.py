@@ -5,24 +5,21 @@ from playwright.sync_api import sync_playwright
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
     page = browser.new_page()
-    page.goto("https://www.theindependentsf.com/", timeout=90000)
-    page.wait_for_load_state("domcontentloaded")
+    page.goto("https://www.theindependentsf.com/", timeout=60000)
+    page.wait_for_load_state("networkidle")  # Wait for dynamic content
 
-    # Wait for iframe to load
-    iframe_element = page.wait_for_selector("iframe[src*='ticketweb']")
-    iframe = iframe_element.content_frame()
+    # Select the root event container
+    event_blocks = page.query_selector_all("div.tw-event-item")
 
-    # Wait for some event content to render inside iframe
-    iframe.wait_for_selector(".tw-event-item", timeout=10000)
-    event_items = iframe.query_selector_all(".tw-event-item")
-    print(f"Found {len(event_items)} events")
+    print(f"Found {len(event_blocks)} events")
 
     events = []
-    for item in event_items:
-        title_el = item.query_selector("p.title a") or item.query_selector("p.headliners")
-        date_el = item.query_selector("p.date") or item.query_selector("p[class*='date']")
-        time_el = item.query_selector("p.doortime-showtime")
-        link_el = item.query_selector("a[href]")
+    for block in event_blocks:
+        # Extract elements
+        title_el = block.query_selector("p.headliners")
+        date_el = block.query_selector("p.date, p.fs-18.bold.mt-1r.date")
+        time_el = block.query_selector("p.doortime-showtime")
+        link_el = block.query_selector("a[href*='/event/']")
 
         events.append({
             "artist": title_el.inner_text().strip() if title_el else None,
@@ -34,9 +31,10 @@ with sync_playwright() as p:
 
     browser.close()
 
+# Output result
 print(json.dumps(events, indent=2))
 
-# Optional: POST to ingest API
+# Optional: post to local ingest endpoint
 try:
     response = requests.post("http://localhost:5000/api/ingest", json=events)
     print("POST status:", response.status_code)

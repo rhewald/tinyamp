@@ -14,6 +14,16 @@ router.get('/', async (req, res) => {
   res.json(events);
 });
 
+// GET /api/events/test - fetch 5 most recent events
+router.get('/test', async (req, res) => {
+  try {
+    const events = await Event.find().sort({ _id: -1 }).limit(5);
+    res.json(events);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching test events', error });
+  }
+});
+
 module.exports = router;
 
 // GET /api/events/test

@@ -1,4 +1,4 @@
-// Puppeteer-Based Scraper for The Chapel (Updated URL to /calendar)
+// Puppeteer-Based Scraper for The Chapel (/calendar)
 const puppeteer = require('puppeteer');
 const mongoose = require('mongoose');
 require('dotenv').config({ path: './server/.env' });
@@ -6,11 +6,12 @@ const Event = require('../server/models/Event');
 
 (async () => {
   await mongoose.connect(process.env.MONGO_URI);
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({ headless: false, slowMo: 50 });
   const page = await browser.newPage();
-  await page.goto('https://thechapelsf.com/calendar/', { waitUntil: 'networkidle2' });
+  await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
 
-  await page.waitForSelector('div.views-row');
+  await page.goto('https://thechapelsf.com/calendar/', { waitUntil: 'networkidle2' });
+  await page.waitForSelector('div.views-row', { timeout: 30000 });
 
   const events = await page.evaluate(() => {
     const rows = document.querySelectorAll('div.views-row');

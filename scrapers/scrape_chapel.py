@@ -8,7 +8,7 @@ with sync_playwright() as p:
     page = browser.new_page()
     page.goto("https://thechapelsf.com/music/", timeout=60000)
     page.wait_for_selector("#event-list")
-
+    
     html = page.content()
     soup = BeautifulSoup(html, "html.parser")
     event_elements = soup.select("#event-list .event-item")
@@ -30,11 +30,12 @@ with sync_playwright() as p:
 
     browser.close()
 
-# Optional: print to console for debugging
 print(json.dumps(events, indent=2))
 
-# Send to backend API
-response = requests.post("http://localhost:5000/api/ingest", json=events)
-print("POST status:", response.status_code)
-print("Response:", response.text)
-
+# OPTIONAL: post to your ingest API
+try:
+    response = requests.post("http://localhost:5000/api/ingest", json=events)
+    print("POST status:", response.status_code)
+    print("Response:", response.text)
+except Exception as e:
+    print("Failed to POST:", str(e))

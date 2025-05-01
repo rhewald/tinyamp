@@ -1,35 +1,50 @@
-const axios = require('axios');
-const cheerio = require('cheerio');
+const puppeteer = require('puppeteer');
 const mongoose = require('mongoose');
 require('dotenv').config({ path: './server/.env' });
 const Event = require('../server/models/Event');
 
 (async () => {
   await mongoose.connect(process.env.MONGO_URI);
-  const url = 'https://thechapelsf.com/';
-  const res = await axios.get(url);
-  const $ = cheerio.load(res.data);
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.goto('https://thechapelsf.com/', { waitUntil: 'networkidle2' });
 
-  const events = [];
+  const events = await page.evaluate(() => {
+    const rows = document.querySelectorAll('div.views-row');
+    const data = [];
 
-  $('.event-list .event-item').each((i, el) => {
-    const artist = $(el).find('.event-title').text().trim();
-    const dateTime = $(el).find('.event-date').text().trim();
-    const [date, time] = dateTime.split(' at ');
-    const image = $(el).find('img').attr('src');
+    rows.forEach(row => {
+      const artist = row.querySelector('.field--name-title')?.innerText?.trim();
+      const dateText = row.querySelector('.field--name-field-event-date')?.innerText?.trim();
+      const image = row.querySelector('img')?.src || '';
 
-    if (artist && date) {
-      events.push({
-        artist,
-        venue: 'The Chapel',
-        date,
-        time: time || '',
-        image: image || '',
-        socials: {}
-      });
-    }
+      let date = '';
+      let time = '';
+
+      if (dateText?.includes('|')) {
+        [date, time] = dateText.split('|').map(t => t.trim());
+      } else {
+        date = dateText;
+      }
+
+      if (artist && date) {
+        data.push({
+          artist,
+          venue: 'The Chapel',
+          date,
+          time,
+          image,
+          socials: {}
+        });
+      }
+    });
+
+    return data;
   });
 
+  await browser.close();
+
+  console.log(`Scraped ${events.length} events...`);
   await Event.deleteMany({ venue: 'The Chapel' });
   await Event.insertMany(events);
   console.log(`Inserted ${events.length} events from The Chapel.`);

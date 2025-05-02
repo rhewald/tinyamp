@@ -12,6 +12,15 @@ def extract_date_from_img_src(src: str):
             return None
     return None
 
+def extract_fallback_date(text: str):
+    match = re.search(r'([A-Z][a-z]+ \d{1,2},? 20\d{2})', text)
+    if match:
+        try:
+            return datetime.strptime(match.group(1).replace(',', ''), "%B %d %Y").strftime("%Y-%m-%d")
+        except:
+            return None
+    return None
+
 def scrape_bottom_of_the_hill():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
@@ -32,9 +41,15 @@ def scrape_bottom_of_the_hill():
             if img_el:
                 img_src = img_el.get_attribute("src")
                 date = extract_date_from_img_src(img_src)
-                print(f"📅 [Block {i}] Extracted date from img: {date}")
+                if date:
+                    print(f"📅 [Block {i}] Extracted date from img: {date}")
+                else:
+                    print(f"⚠️ [Block {i}] Image found but date couldn't be parsed")
             else:
                 print(f"⚠️ [Block {i}] No image found for date")
+                date = extract_fallback_date(text)
+                if date:
+                    print(f"📅 [Block {i}] Fallback date extracted from text: {date}")
 
             band_els = block.query_selector_all("big.band")
             artists = [el.inner_text().strip().upper() for el in band_els]
@@ -45,7 +60,7 @@ def scrape_bottom_of_the_hill():
             artist_string = ", ".join(artists)
 
             time_lines = [line for line in text.splitlines() if "door" in line.lower() or "music" in line.lower()]
-            show_time = time_lines[0] if time_lines else ""
+            show_time = time_lines[0].replace('\xa0', ' ').strip() if time_lines else ""
 
             events.append({
                 "artist": artist_string,

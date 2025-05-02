@@ -8,7 +8,6 @@ def scrape_independent_events():
         print("⏳ Loading page...")
         page.goto("https://www.theindependentsf.com/", timeout=60000)
 
-        # Close popup if present
         try:
             popup = page.query_selector("div#om-mnuwxyw8zcuetb2b-holder .om-close")
             if popup:
@@ -27,7 +26,7 @@ def scrape_independent_events():
         events = []
 
         for block in event_blocks:
-            artist_el = block.query_selector("div.tw-name-container a")
+            artist_el = block.query_selector("div.tw-name > a")  # 🛠 Corrected
             date_el = block.query_selector("span.tw-event-date")
             time_el = block.query_selector("span.tw-event-time-complete")
             link_el = artist_el
@@ -56,8 +55,8 @@ def scrape_independent_events():
 
         print(events)
 
-        inserted = insert_unique_events(events)
-        print(f"\nDone. Inserted: {inserted['inserted']}, Skipped (duplicates): {inserted['skipped']}")
+        result = insert_unique_events(events) or {"inserted": 0, "skipped": 0}
+        print(f"\nDone. Inserted: {result['inserted']}, Skipped (duplicates): {result['skipped']}")
 
         browser.close()
 

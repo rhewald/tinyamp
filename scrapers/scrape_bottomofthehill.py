@@ -29,11 +29,13 @@ def scrape_bottom_of_the_hill():
             if len(tds) < 3:
                 continue
 
-            block = tds[2]  # Only parse the third <td>
+            # Only process the third <td> in each row (index 2)
+            block = tds[2]
             style = block.get_attribute("style") or ""
             if "background-color: rgb(204, 204, 51)" not in style:
                 continue
 
+            text = block.inner_text().strip()
             img_el = block.query_selector("a[href$='.jpg'] > img")
             if not img_el:
                 print(f"⚠️ [Block {i}] Skipping: No image found for date")
@@ -47,7 +49,6 @@ def scrape_bottom_of_the_hill():
 
             print(f"📅 [Block {i}] Extracted date from img: {date}")
 
-            text = block.inner_text().strip()
             band_els = block.query_selector_all("big.band")
             artists = [el.inner_text().strip().upper() for el in band_els]
             if not artists:

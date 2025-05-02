@@ -1,12 +1,20 @@
 from playwright.sync_api import sync_playwright
 import requests
 from datetime import datetime
+import re
 
 def normalize_date(text):
     try:
-        return datetime.strptime(text.strip(), "%A %B %d %Y").strftime("%Y-%m-%d")
-    except Exception:
-        return None
+        # Extract a pattern like 'Thursday May 1 2025'
+        match = re.search(r"\b\w+day\s+\w+\s+\d{1,2}\s+2025", text, re.IGNORECASE)
+        if match:
+            dt = datetime.strptime(match.group(), "%A %B %d %Y")
+            return dt.strftime("%Y-%m-%d")
+        else:
+            print(f"❌ No date match found in: '{text}'")
+    except Exception as e:
+        print(f"❌ Date parse failed: '{text}' ({e})")
+    return None
 
 def scrape_bottom_of_the_hill():
     with sync_playwright() as p:
@@ -29,7 +37,8 @@ def scrape_bottom_of_the_hill():
             if not date_el:
                 print(f"⚠️ [Block {i}] No date found")
                 continue
-            date_text = date_el.inner_text().strip() + " 2025"
+            date_text = date_el.inner_text().strip()
+            print(f"📅 [Block {i}] Raw date: '{date_text}'")
             date = normalize_date(date_text)
 
             # Time (from text)

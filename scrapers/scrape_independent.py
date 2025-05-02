@@ -27,7 +27,7 @@ def scrape_independent_events():
         events = []
 
         for block in event_blocks:
-            artist_el = block.query_selector("p.headliners")
+            artist_el = block.query_selector("p.headliners") or block.query_selector("div.tw-event-item-headliners") or block.query_selector("h1, h2, h3, p")
             date_el = block.query_selector("span.tw-event-date")
             time_el = block.query_selector("span.tw-event-time-complete")
             link_el = block.query_selector("a")

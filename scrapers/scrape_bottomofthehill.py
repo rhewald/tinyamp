@@ -25,42 +25,36 @@ def scrape_bottom_of_the_hill():
         events = []
 
         for i, block in enumerate(event_blocks):
-            # Extract date from image
             img_el = block.query_selector("a[href$='.jpg'] > img")
-            date = None
-            if img_el:
-                img_src = img_el.get_attribute("src")
-                date = extract_date_from_img_src(img_src)
-                if date:
-                    print(f"📅 [Block {i}] Extracted date from img: {date}")
-                else:
-                    print(f"⚠️ [Block {i}] Could not parse date from image src: {img_src}")
-            else:
-                print(f"⚠️ [Block {i}] No image found for date")
-                continue  # Skip if no date
+            if not img_el:
+                print(f"⚠️ [Block {i}] Skipping — no date image")
+                continue
 
-            # Extract artists
+            img_src = img_el.get_attribute("src")
+            date = extract_date_from_img_src(img_src)
+            if not date:
+                print(f"⚠️ [Block {i}] Skipping — image src didn't contain valid date: {img_src}")
+                continue
+
             band_els = block.query_selector_all("big.band")
-            artists = [el.inner_text().strip().upper() for el in band_els if el.inner_text().strip()]
+            artists = [el.inner_text().strip().upper() for el in band_els]
             if not artists:
-                print(f"⚠️ [Block {i}] No artists found")
+                print(f"⚠️ [Block {i}] Skipping — no artists found")
                 continue
 
             artist_string = ", ".join(artists)
-
-            # Extract time
-            text = block.inner_text().strip()
+            text = block.inner_text()
             time_lines = [line for line in text.splitlines() if "door" in line.lower() or "music" in line.lower()]
             show_time = time_lines[0] if time_lines else ""
 
-            # Assemble event
             events.append({
                 "artist": artist_string,
                 "date": date,
-                "time": show_time,
+                "time": show_time.strip(),
                 "venue": "Bottom of the Hill",
                 "link": "https://www.bottomofthehill.com/calendar.html"
             })
+            print(f"✅ [Block {i}] Parsed event: {artist_string} on {date}")
 
         print(events)
 

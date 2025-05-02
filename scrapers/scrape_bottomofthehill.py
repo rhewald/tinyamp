@@ -3,10 +3,9 @@ import requests
 from datetime import datetime
 
 def normalize_date(text):
-    """Convert 'Thursday May 1 2025' to '2025-05-01'"""
     try:
         return datetime.strptime(text.strip(), '%A %B %d %Y').strftime('%Y-%m-%d')
-    except Exception as e:
+    except Exception:
         return None
 
 def scrape_bottom_of_the_hill():
@@ -27,33 +26,37 @@ def scrape_bottom_of_the_hill():
             if not td:
                 continue
 
-            # Get the date if available
+            # Grab date
             date_el = td.query_selector("span.date")
             if date_el:
                 date_text = date_el.inner_text().strip() + " 2025"
                 current_date = normalize_date(date_text)
 
-            # Get all band names (headliner and supports)
-            band_els = td.query_selector_all("big.band")
-            if not band_els:
+            # Grab all band names (headliner + openers)
+            band_els = td.query_selector_all("big")
+            band_names = [
+                el.inner_text().strip().upper()
+                for el in band_els
+                if "class" in el.get_attribute("outerHTML") and "band" in el.get_attribute("class")
+            ]
+            if not band_names:
                 continue
 
-            artists = [el.inner_text().strip().upper() for el in band_els]
-            artist = ", ".join(artists)
+            artist = ", ".join(band_names)
 
             if not artist or not current_date:
                 print("⚠️ Skipping row due to missing artist or date")
                 continue
 
-            # Try to extract time info (look for "doors" or "music")
-            all_text = td.inner_text()
-            time_lines = [line.strip() for line in all_text.splitlines() if "door" in line.lower() or "music" in line.lower()]
-            show_time = time_lines[0] if time_lines else ""
+            # Extract time (look for line with 'doors' or 'music')
+            text_block = td.inner_text()
+            time_lines = [line.strip() for line in text_block.splitlines() if "door" in line.lower()]
+            time_str = time_lines[0] if time_lines else ""
 
             events.append({
                 "artist": artist,
                 "date": current_date,
-                "time": show_time,
+                "time": time_str,
                 "venue": "Bottom of the Hill",
                 "link": "https://www.bottomofthehill.com/calendar.html"
             })

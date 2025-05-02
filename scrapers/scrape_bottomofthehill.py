@@ -3,16 +3,7 @@ import requests
 from datetime import datetime
 import re
 
-def extract_date_from_img_src(src: str):
-    match = re.search(r'/f/(20\d{6})[a-z]*\.jpg', src)
-    if match:
-        try:
-            return datetime.strptime(match.group(1), "%Y%m%d").strftime("%Y-%m-%d")
-        except:
-            return None
-    return None
-
-def extract_fallback_date(text: str):
+def extract_date_from_text(text: str):
     match = re.search(r'([A-Z][a-z]+ \d{1,2},? 20\d{2})', text)
     if match:
         try:
@@ -36,22 +27,12 @@ def scrape_bottom_of_the_hill():
         for i, block in enumerate(event_blocks):
             text = block.inner_text().strip()
 
-            # Try to extract date from image if present
-            img_el = block.query_selector("a[href$='.jpg'] > img")
-            date = None
-            if img_el:
-                img_src = img_el.get_attribute("src")
-                date = extract_date_from_img_src(img_src)
-                if date:
-                    print(f"📅 [Block {i}] Extracted date from img: {date}")
-                else:
-                    print(f"⚠️ [Block {i}] Image found but date couldn't be parsed")
+            # Extract date from text content
+            date = extract_date_from_text(text)
+            if date:
+                print(f"📅 [Block {i}] Extracted date: {date}")
             else:
-                date = extract_fallback_date(text)
-                if date:
-                    print(f"📅 [Block {i}] Fallback date extracted from text: {date}")
-                else:
-                    print(f"⚠️ [Block {i}] Could not extract date")
+                print(f"⚠️ [Block {i}] Could not extract date")
 
             # Extract artist(s)
             band_els = block.query_selector_all("big.band")
@@ -62,7 +43,7 @@ def scrape_bottom_of_the_hill():
             time_lines = [line for line in text.splitlines() if "door" in line.lower() or "music" in line.lower()]
             show_time = time_lines[0].replace('\xa0', ' ').strip() if time_lines else ""
 
-            # Only skip blocks that are *fully* empty
+            # Only skip blocks with absolutely no usable data
             if not date and not artist_string and not show_time:
                 print(f"⚠️ [Block {i}] Skipping: No usable content found")
                 continue

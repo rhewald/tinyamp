@@ -1,6 +1,7 @@
 from playwright.sync_api import sync_playwright
 import requests
 from datetime import datetime
+import re
 
 def normalize_date(text):
     try:
@@ -26,31 +27,26 @@ def scrape_bottom_of_the_hill():
             if not td:
                 continue
 
-            # Grab date
+            td_html = td.inner_html()
+            td_text = td.inner_text()
+
+            # Get date
             date_el = td.query_selector("span.date")
             if date_el:
                 date_text = date_el.inner_text().strip() + " 2025"
                 current_date = normalize_date(date_text)
 
-            # Grab all band names (headliner + openers)
-            band_els = td.query_selector_all("big")
-            band_names = [
-                el.inner_text().strip().upper()
-                for el in band_els
-                if "class" in el.get_attribute("outerHTML") and "band" in el.get_attribute("class")
-            ]
-            if not band_names:
+            # Match all <big class="band">Band Name</big>
+            band_matches = re.findall(r'<big[^>]*class=["\']band["\'][^>]*>(.*?)</big>', td_html, re.IGNORECASE)
+            band_names = [b.strip().upper() for b in band_matches]
+            if not band_names or not current_date:
+                print("⚠️ Skipping row due to missing artist or date")
                 continue
 
             artist = ", ".join(band_names)
 
-            if not artist or not current_date:
-                print("⚠️ Skipping row due to missing artist or date")
-                continue
-
-            # Extract time (look for line with 'doors' or 'music')
-            text_block = td.inner_text()
-            time_lines = [line.strip() for line in text_block.splitlines() if "door" in line.lower()]
+            # Get showtime line with "door" or "music"
+            time_lines = [line.strip() for line in td_text.splitlines() if "door" in line.lower() or "music" in line.lower()]
             time_str = time_lines[0] if time_lines else ""
 
             events.append({

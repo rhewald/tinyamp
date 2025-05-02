@@ -5,7 +5,7 @@ from datetime import datetime
 def normalize_date(date_str):
     try:
         parts = date_str.strip().split()
-        # Expected format: ['Thursday', 'May', '1', '2025']
+        # Expected: Thursday May 1 2025
         if len(parts) == 4:
             month = datetime.strptime(parts[1], "%B").month
             day = int(parts[2])
@@ -22,32 +22,32 @@ def scrape_bottom_of_the_hill():
         print("⏳ Loading Bottom of the Hill page...")
         page.goto("https://www.bottomofthehill.com/calendar.html", timeout=60000)
 
+        rows = page.query_selector_all("table#listings > tbody > tr")
+        print(f"✅ Found {len(rows)} rows")
+
         events = []
-        event_blocks = page.query_selector_all("table#listings > tbody > tr")
-
-        print(f"✅ Found {len(event_blocks)} rows (some may be empty or irrelevant)")
-
         current_date = None
-        for row in event_blocks:
+
+        for row in rows:
+            # Date appears in span inside td with class="date"
             date_el = row.query_selector("td.date span")
-            artist_els = row.query_selector_all("td.big.band big.band")
-            time_el = row.query_selector("td.time")
-
             if date_el:
-                date_text = date_el.inner_text().strip()
-                if date_text:
-                    current_date = date_text  # Set current date for subsequent rows
+                current_date = date_el.inner_text().strip()  # Updates for this and following rows
 
-            artists = [a.inner_text().strip() for a in artist_els if a.inner_text().strip()]
+            # Artist(s) are all <big class="band"> within td.big.band
+            artist_els = row.query_selector_all("td.big.band big.band")
+            artists = [el.inner_text().strip() for el in artist_els if el.inner_text().strip()]
             artist_str = ", ".join(artists) if artists else None
 
-            time_text = time_el.inner_text().strip() if time_el else None
+            # Doors/time (optional, fallback to TBA)
+            time_el = row.query_selector("td.time")
+            time_str = time_el.inner_text().strip() if time_el and time_el.inner_text().strip() else "TBA"
 
             if artist_str and current_date:
                 events.append({
                     "artist": artist_str.upper(),
                     "date": normalize_date(current_date),
-                    "time": time_text or "TBA",
+                    "time": time_str,
                     "venue": "Bottom of the Hill",
                     "link": "https://www.bottomofthehill.com/calendar.html"
                 })
@@ -57,7 +57,6 @@ def scrape_bottom_of_the_hill():
         browser.close()
         print(events)
 
-        # Optional POST to local backend
         try:
             response = requests.post("http://localhost:3001/api/events", json=events)
             print(f"POST status: {response.status_code}")

@@ -27,9 +27,15 @@ def scrape_bottom_of_the_hill():
         current_date = None
 
         for row in rows:
-            td = row.query_selector("td[style*='background-color']")
+            td = row.query_selector("td")
             if not td:
                 continue
+
+            # Look for date if it's present
+            date_el = td.query_selector("span.date")
+            if date_el:
+                date_text = date_el.inner_text().strip()
+                current_date = normalize_date(date_text)
 
             # Look for date in span.date
             date_el = td.query_selector("span.date")

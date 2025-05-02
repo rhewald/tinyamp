@@ -8,16 +8,17 @@ def extract_date_from_img_src(src: str):
     if match:
         try:
             return datetime.strptime(match.group(1), "%Y%m%d").strftime("%Y-%m-%d")
-        except:
+        except Exception:
             return None
     return None
 
 def extract_fallback_date(text: str):
-    match = re.search(r'([A-Z][a-z]+ \d{1,2},? 20\d{2})', text)
+    # Match patterns like "Saturday May 17 2025", "May 17 2025", etc.
+    match = re.search(r'(?:(?:Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day\s*)?([A-Za-z]+)\s+(\d{1,2}),?\s+(2025)', text)
     if match:
         try:
-            return datetime.strptime(match.group(1).replace(',', ''), "%B %d %Y").strftime("%Y-%m-%d")
-        except:
+            return datetime.strptime(f"{match.group(1)} {match.group(2)} {match.group(3)}", "%B %d %Y").strftime("%Y-%m-%d")
+        except Exception:
             return None
     return None
 
@@ -28,7 +29,8 @@ def scrape_bottom_of_the_hill():
         print("⏳ Loading Bottom of the Hill page...")
         page.goto("https://www.bottomofthehill.com/calendar.html", timeout=60000)
 
-        event_blocks = page.query_selector_all("td[style*='background-color: rgb(204, 204, 51)']")
+        all_tds = page.query_selector_all("td")
+        event_blocks = [td for td in all_tds if "background-color: rgb(204, 204, 51)" in (td.get_attribute("style") or "")]
         print(f"✅ Found {len(event_blocks)} event blocks")
 
         events = []
@@ -44,23 +46,23 @@ def scrape_bottom_of_the_hill():
                 if date:
                     print(f"📅 [Block {i}] Extracted date from img: {date}")
                 else:
-                    print(f"⚠️ [Block {i}] Image found but date couldn't be parsed")
-            else:
-                print(f"⚠️ [Block {i}] No image found for date")
+                    print(f"⚠️ [Block {i}] Failed to parse date from img src")
+            if not date:
                 date = extract_fallback_date(text)
                 if date:
                     print(f"📅 [Block {i}] Fallback date extracted from text: {date}")
+                else:
+                    print(f"⚠️ [Block {i}] Could not extract date")
 
             band_els = block.query_selector_all("big.band")
-            artists = [el.inner_text().strip().upper() for el in band_els]
+            artists = [el.inner_text().strip().upper() for el in band_els if el.inner_text().strip()]
             if not artists:
                 print(f"⚠️ [Block {i}] No artists found")
                 continue
 
             artist_string = ", ".join(artists)
-
             time_lines = [line for line in text.splitlines() if "door" in line.lower() or "music" in line.lower()]
-            show_time = time_lines[0].replace('\xa0', ' ').strip() if time_lines else ""
+            show_time = time_lines[0].strip() if time_lines else ""
 
             events.append({
                 "artist": artist_string,
@@ -69,6 +71,7 @@ def scrape_bottom_of_the_hill():
                 "venue": "Bottom of the Hill",
                 "link": "https://www.bottomofthehill.com/calendar.html"
             })
+            print(f"✅ [Block {i}] Parsed event: {artist_string} on {date}")
 
         print(events)
 

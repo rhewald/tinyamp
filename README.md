@@ -8,6 +8,3 @@ SF Indie Music Event Aggregator — Automatically curates and displays live show
 - Express (backend)
 - MongoDB (data store)
 - Scheduled scrapers with Puppeteer/OCR
-
-helo
-

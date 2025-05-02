@@ -1,4 +1,11 @@
+import os
 from datetime import datetime
+from dotenv import load_dotenv
+from pymongo import MongoClient
+
+# Load the environment variables from server/.env
+load_dotenv(dotenv_path="server/.env")
+
 
 def normalize_date(short_date):
     """
@@ -12,26 +19,30 @@ def normalize_date(short_date):
     except:
         return None
 
+
 def normalize_time(raw_time):
     """
     Normalize 24-hour time like '20:00' or already formatted strings to 'SHOW: 8:00 PM'.
     """
     try:
-        # Remove prefix if already present
         time_str = raw_time.replace("SHOW:", "").strip().upper()
-        # Handle if time is in HH:MM (24-hour)
         if ":" in time_str and len(time_str) <= 5 and time_str[0].isdigit():
             hour, minute = map(int, time_str.split(":"))
             t = datetime.strptime(f"{hour}:{minute}", "%H:%M")
             return f"SHOW: {t.strftime('%-I:%M %p')}"
-        # Else, return as-is with proper prefix
         return f"SHOW: {time_str}"
     except:
         return raw_time
 
-from pymongo import MongoClient
 
-def insert_unique_events(events, db_name="tinyamp", collection_name="events", uri="mongodb://localhost:27017"):
+def insert_unique_events(events, db_name="tinyamp", collection_name="events", uri=None):
+    if not uri:
+        uri = os.getenv("MONGO_URI")
+
+    if not uri:
+        print("❌ MONGO_URI not set. Check your server/.env file.")
+        return
+
     client = MongoClient(uri)
     db = client[db_name]
     collection = db[collection_name]
@@ -60,4 +71,3 @@ def insert_unique_events(events, db_name="tinyamp", collection_name="events", ur
 
     print(f"\nDone. Inserted: {inserted}, Skipped (duplicates): {skipped}")
     client.close()
-

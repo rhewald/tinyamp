@@ -1,11 +1,10 @@
 from playwright.sync_api import sync_playwright
 import requests
 from datetime import datetime
-import re
 
 def normalize_date(text):
     try:
-        return datetime.strptime(text.strip(), '%A %B %d %Y').strftime('%Y-%m-%d')
+        return datetime.strptime(text.strip(), "%A %B %d %Y").strftime("%Y-%m-%d")
     except Exception:
         return None
 
@@ -16,44 +15,53 @@ def scrape_bottom_of_the_hill():
         print("⏳ Loading Bottom of the Hill page...")
         page.goto("https://www.bottomofthehill.com/calendar.html", timeout=60000)
 
-        rows = page.query_selector_all("table#listings > tbody > tr")
-        print(f"✅ Found {len(rows)} rows (some may be empty or irrelevant)\n")
+        event_blocks = page.query_selector_all("td[style*='background-color: rgb(204, 204, 51)']")
+        print(f"✅ Found {len(event_blocks)} event blocks")
 
         events = []
-        current_date = None
 
-        for i, row in enumerate(rows):
-            td = row.query_selector("td")
-            if not td:
-                print(f"[Row {i}] ⛔ No <td> element found, skipping.\n")
+        for i, block in enumerate(event_blocks):
+            html = block.inner_html()
+            text = block.inner_text()
+
+            # Date
+            date_el = block.query_selector("span.date")
+            if not date_el:
+                print(f"⚠️ [Block {i}] No date found")
+                continue
+            date_text = date_el.inner_text().strip() + " 2025"
+            date = normalize_date(date_text)
+
+            # Time (from text)
+            time_lines = [line.strip() for line in text.splitlines() if "door" in line.lower() or "music" in line.lower()]
+            show_time = time_lines[0] if time_lines else ""
+
+            # Bands
+            band_els = block.query_selector_all("big.band")
+            artists = [el.inner_text().strip().upper() for el in band_els]
+            if not artists:
+                print(f"⚠️ [Block {i}] No artists found")
                 continue
 
-            td_html = td.inner_html()
-            td_text = td.inner_text()
+            # Combine artists into single string
+            artist_string = ", ".join(artists)
 
-            print(f"\n🔍 [Row {i}] --- RAW HTML START ---")
-            print(td_html)
-            print(f"--- RAW HTML END ---\n")
+            events.append({
+                "artist": artist_string,
+                "date": date,
+                "time": show_time,
+                "venue": "Bottom of the Hill",
+                "link": "https://www.bottomofthehill.com/calendar.html"
+            })
 
-            print(f"[Row {i}] --- TEXT START ---")
-            print(td_text)
-            print(f"--- TEXT END ---\n")
+        print(events)
 
-            # Still try to get date
-            date_el = td.query_selector("span.date")
-            if date_el:
-                date_text = date_el.inner_text().strip() + " 2025"
-                current_date = normalize_date(date_text)
-                print(f"[Row {i}] ✅ Date parsed: {current_date}")
-            else:
-                print(f"[Row {i}] ⚠️ No date element found")
-
-            # Extract all band names from <big class="band">
-            band_matches = re.findall(r'<big[^>]*class=["\']band["\'][^>]*>(.*?)</big>', td_html, re.IGNORECASE)
-            band_names = [b.strip().upper() for b in band_matches]
-            print(f"[Row {i}] 🎸 Bands found: {band_names}")
-
-            # No filtering yet — we're collecting every row's results
+        try:
+            response = requests.post("http://localhost:3001/api/events", json=events)
+            print(f"POST status: {response.status_code}")
+            print(f"Response: {response.text}")
+        except requests.exceptions.ConnectionError:
+            print("❌ Could not connect to localhost:3001 — skipping POST.")
 
         browser.close()
 

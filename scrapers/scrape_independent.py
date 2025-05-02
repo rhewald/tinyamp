@@ -1,4 +1,5 @@
 from playwright.sync_api import sync_playwright
+import requests
 from scraper_utils import normalize_date, normalize_time, insert_unique_events
 
 def scrape_independent_events():
@@ -8,7 +9,6 @@ def scrape_independent_events():
         print("⏳ Loading page...")
         page.goto("https://www.theindependentsf.com/", timeout=60000)
 
-        # Close popup if it exists
         try:
             popup = page.query_selector("div#om-mnuwxyw8zcuetb2b-holder .om-close")
             if popup:
@@ -43,17 +43,21 @@ def scrape_independent_events():
             if link and not link.startswith("http"):
                 link = "https://www.theindependentsf.com" + link
 
-            events.append({
-                "artist": artist,
-                "date": date,
-                "time": time,
-                "venue": "The Independent",
-                "link": link
-            })
+            # Only append if artist, date, and venue are present
+            if artist and date:
+                events.append({
+                    "artist": artist,
+                    "date": date,
+                    "time": time,
+                    "venue": "The Independent",
+                    "link": link
+                })
+            else:
+                print("⚠️ Skipping event due to missing artist or date.")
 
         print(events)
 
-        # Insert into MongoDB with deduplication
+        # Insert into DB, deduplicated
         insert_unique_events(events)
 
         browser.close()

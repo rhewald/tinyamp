@@ -1,77 +1,65 @@
 from playwright.sync_api import sync_playwright
-import requests
-from datetime import datetime
+from scraper_utils import normalize_date, normalize_time, insert_unique_events
 
-def normalize_date(short_date):
-    """Convert dates like '5.1' to '2025-05-01'."""
-    try:
-        month, day = map(int, short_date.strip().split('.'))
-        year = datetime.now().year
-        event_date = datetime(year=year, month=month, day=day)
-        return event_date.strftime("%Y-%m-%d")
-    except:
-        return None
+def scrape_independent_events():
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        print("⏳ Loading page...")
+        page.goto("https://www.theindependentsf.com/", timeout=60000)
 
-with sync_playwright() as p:
-    browser = p.chromium.launch(headless=True)
-    page = browser.new_page()
-    print("⏳ Loading page...")
-    page.goto("https://www.theindependentsf.com/", timeout=60000)
+        # Close popup if present
+        try:
+            popup = page.query_selector("div#om-mnuwxyw8zcuetb2b-holder .om-close")
+            if popup:
+                popup.click()
+                print("✅ Closed popup.")
+            else:
+                print("ℹ️ No popup found or already closed.")
+        except:
+            print("⚠️ Popup close failed (non-blocking).")
 
-    # Try closing the popup if it appears
-    try:
-        popup = page.query_selector("div#om-mnuwxyw8zcuetb2b-holder .om-close")
-        if popup:
-            popup.click()
-            print("✅ Closed popup.")
-        else:
-            print("ℹ️ No popup found or already closed.")
-    except:
-        print("⚠️ Popup close failed (non-blocking).")
+        print("⏳ Waiting for content to load...")
+        page.wait_for_selector("div.tw-event-item", timeout=30000)
+        event_blocks = page.query_selector_all("div.tw-event-item")
+        print(f"✅ Found {len(event_blocks)} events")
 
-    print("⏳ Waiting for content to load...")
-    page.wait_for_selector("div.tw-event-item", timeout=30000)
-    event_blocks = page.query_selector_all("div.tw-event-item")
-    print(f"✅ Found {len(event_blocks)} events")
+        events = []
 
-    events = []
+        for block in event_blocks:
+            artist_el = block.query_selector("div.tw-name-container a")
+            date_el = block.query_selector("span.tw-event-date")
+            time_el = block.query_selector("span.tw-event-time-complete")
+            link_el = artist_el
 
-    for block in event_blocks:
-        artist_el = block.query_selector("div.tw-name")
-        date_el = block.query_selector("span.tw-event-date")
-        time_el = block.query_selector("span.tw-event-time-complete")
-        link_el = block.query_selector("a")
+            artist = artist_el.inner_text().strip() if artist_el else None
+            short_date = date_el.inner_text().strip() if date_el else None
+            raw_time = time_el.inner_text().strip() if time_el else None
+            link = link_el.get_attribute("href") if link_el else None
 
-        artist = artist_el.inner_text().strip() if artist_el else None
-        short_date = date_el.inner_text().strip() if date_el else None
-        time = time_el.inner_text().strip() if time_el else None
-        link = link_el.get_attribute("href") if link_el else None
+            if link and not link.startswith("http"):
+                link = "https://www.theindependentsf.com" + link
 
-        date = normalize_date(short_date)
+            date = normalize_date(short_date)
+            time = normalize_time(raw_time)
 
-        if link and not link.startswith("http"):
-            link = "https://www.theindependentsf.com" + link
+            if artist and date:
+                events.append({
+                    "artist": artist,
+                    "date": date,
+                    "time": time,
+                    "venue": "The Independent",
+                    "link": link
+                })
+            else:
+                print("⚠️ Skipping event due to missing artist or date.")
 
-        if not artist or not date:
-            print("⚠️ Skipping event due to missing artist or date.")
-            continue
+        print(events)
 
-        events.append({
-            "artist": artist,
-            "date": date,
-            "time": time,
-            "venue": "The Independent",
-            "link": link
-        })
+        inserted = insert_unique_events(events)
+        print(f"\nDone. Inserted: {inserted['inserted']}, Skipped (duplicates): {inserted['skipped']}")
 
-    print(events)
+        browser.close()
 
-    # Optional POST to local backend
-    try:
-        response = requests.post("http://localhost:3001/api/events", json=events)
-        print(f"POST status: {response.status_code}")
-        print(f"Response: {response.text}")
-    except requests.exceptions.ConnectionError:
-        print("❌ Could not connect to localhost:3001 — skipping POST.")
-
-    browser.close()
+if __name__ == "__main__":
+    scrape_independent_events()

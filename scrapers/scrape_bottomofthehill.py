@@ -3,11 +3,10 @@ import requests
 from datetime import datetime
 
 def normalize_date(text):
-    """Convert 'Thursday May 1 2025' → '2025-05-01'"""
+    """Convert 'Thursday May 1 2025' to '2025-05-01'"""
     try:
-        dt = datetime.strptime(text.strip(), '%A %B %d %Y')
-        return dt.strftime('%Y-%m-%d')
-    except:
+        return datetime.strptime(text.strip(), '%A %B %d %Y').strftime('%Y-%m-%d')
+    except Exception as e:
         return None
 
 def scrape_bottom_of_the_hill():
@@ -17,40 +16,44 @@ def scrape_bottom_of_the_hill():
         print("⏳ Loading Bottom of the Hill page...")
         page.goto("https://www.bottomofthehill.com/calendar.html", timeout=60000)
 
-        rows = page.query_selector_all("table#listings tr")
+        rows = page.query_selector_all("table#listings > tbody > tr")
         print(f"✅ Found {len(rows)} rows (some may be empty or irrelevant)")
 
         events = []
         current_date = None
 
         for row in rows:
-            cell = row.query_selector("td[style*='background-color']")
-            if not cell:
+            td = row.query_selector("td")
+            if not td:
                 continue
 
-            text = cell.inner_text().strip()
-
-            # Grab the date like "Thursday May 1 2025"
-            date_el = cell.query_selector("span.date")
+            # Get the date if available
+            date_el = td.query_selector("span.date")
             if date_el:
-                current_date = normalize_date(date_el.inner_text() + " 2025")
+                date_text = date_el.inner_text().strip() + " 2025"
+                current_date = normalize_date(date_text)
 
-            # First band listed is headliner
-            headliner_el = cell.query_selector("big.band")
-            if not headliner_el or not current_date:
+            # Get all band names (headliner and supports)
+            band_els = td.query_selector_all("big.band")
+            if not band_els:
+                continue
+
+            artists = [el.inner_text().strip().upper() for el in band_els]
+            artist = ", ".join(artists)
+
+            if not artist or not current_date:
                 print("⚠️ Skipping row due to missing artist or date")
                 continue
 
-            artist = headliner_el.inner_text().strip().upper()
-
-            # Extract line with "door" or "music"
-            time_lines = [line.strip() for line in text.splitlines() if "door" in line.lower() or "music" in line.lower()]
-            time = time_lines[0] if time_lines else ""
+            # Try to extract time info (look for "doors" or "music")
+            all_text = td.inner_text()
+            time_lines = [line.strip() for line in all_text.splitlines() if "door" in line.lower() or "music" in line.lower()]
+            show_time = time_lines[0] if time_lines else ""
 
             events.append({
                 "artist": artist,
                 "date": current_date,
-                "time": time,
+                "time": show_time,
                 "venue": "Bottom of the Hill",
                 "link": "https://www.bottomofthehill.com/calendar.html"
             })

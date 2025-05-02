@@ -4,13 +4,11 @@ from datetime import datetime
 
 def normalize_date(date_str):
     try:
+        # Expected: "Thursday May 1 2025"
         parts = date_str.strip().split()
-        # Expected: Thursday May 1 2025
         if len(parts) == 4:
-            month = datetime.strptime(parts[1], "%B").month
-            day = int(parts[2])
-            year = int(parts[3])
-            return datetime(year=year, month=month, day=day).strftime("%Y-%m-%d")
+            dt = datetime.strptime(" ".join(parts[1:]), "%B %d %Y")
+            return dt.strftime("%Y-%m-%d")
     except Exception as e:
         print(f"⚠️ Date normalization failed for '{date_str}': {e}")
     return None
@@ -23,31 +21,36 @@ def scrape_bottom_of_the_hill():
         page.goto("https://www.bottomofthehill.com/calendar.html", timeout=60000)
 
         rows = page.query_selector_all("table#listings > tbody > tr")
-        print(f"✅ Found {len(rows)} rows")
+        print(f"✅ Found {len(rows)} rows (some may be empty or irrelevant)")
 
         events = []
         current_date = None
 
         for row in rows:
-            # Date appears in span inside td with class="date"
-            date_el = row.query_selector("td.date span")
+            td = row.query_selector("td[style*='background-color']")
+            if not td:
+                continue
+
+            # Look for date in span.date
+            date_el = td.query_selector("span.date")
             if date_el:
-                current_date = date_el.inner_text().strip()  # Updates for this and following rows
+                date_text = date_el.inner_text().strip()
+                current_date = normalize_date(date_text)
 
-            # Artist(s) are all <big class="band"> within td.big.band
-            artist_els = row.query_selector_all("td.big.band big.band")
-            artists = [el.inner_text().strip() for el in artist_els if el.inner_text().strip()]
-            artist_str = ", ".join(artists) if artists else None
+            # Gather all bands (headliner, supports, opener)
+            band_els = td.query_selector_all("big.band")
+            bands = [el.inner_text().strip() for el in band_els if el.inner_text().strip()]
+            artist = ", ".join(bands)
 
-            # Doors/time (optional, fallback to TBA)
-            time_el = row.query_selector("td.time")
-            time_str = time_el.inner_text().strip() if time_el and time_el.inner_text().strip() else "TBA"
+            # Optional time
+            time_el = td.query_selector("span.time")
+            time = time_el.inner_text().strip() if time_el else "TBA"
 
-            if artist_str and current_date:
+            if current_date and artist:
                 events.append({
-                    "artist": artist_str.upper(),
-                    "date": normalize_date(current_date),
-                    "time": time_str,
+                    "artist": artist.upper(),
+                    "date": current_date,
+                    "time": time,
                     "venue": "Bottom of the Hill",
                     "link": "https://www.bottomofthehill.com/calendar.html"
                 })
@@ -62,7 +65,7 @@ def scrape_bottom_of_the_hill():
             print(f"POST status: {response.status_code}")
             print(f"Response: {response.text}")
         except requests.exceptions.RequestException as e:
-            print(f"❌ Could not connect to backend: {e}")
+            print(f"❌ POST failed: {e}")
 
 if __name__ == "__main__":
     scrape_bottom_of_the_hill()

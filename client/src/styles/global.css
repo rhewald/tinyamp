@@ -1,0 +1,35 @@
+body {
+  font-family: sans-serif;
+  background-color: #121212;
+  color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  padding: 1rem;
+  font-size: 2rem;
+}
+
+.event-card {
+  background: #1e1e1e;
+  padding: 1rem;
+  margin: 1rem auto;
+  max-width: 600px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #00000040;
+}
+
+.event-card h2 {
+  margin: 0 0 0.5rem;
+}
+
+.event-card a {
+  color: #1db954;
+  text-decoration: none;
+}
+
+.event-card a:hover {
+  text-decoration: underline;
+}

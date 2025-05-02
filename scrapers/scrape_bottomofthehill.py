@@ -3,17 +3,13 @@ import requests
 from datetime import datetime
 import re
 
-def normalize_date(text):
-    try:
-        # Extract a pattern like 'Thursday May 1 2025'
-        match = re.search(r"\b\w+day\s+\w+\s+\d{1,2}\s+2025", text, re.IGNORECASE)
-        if match:
-            dt = datetime.strptime(match.group(), "%A %B %d %Y")
-            return dt.strftime("%Y-%m-%d")
-        else:
-            print(f"❌ No date match found in: '{text}'")
-    except Exception as e:
-        print(f"❌ Date parse failed: '{text}' ({e})")
+def extract_date_from_img_src(src: str):
+    match = re.search(r'/f/(20\d{6})[a-z]*\.jpg', src)
+    if match:
+        try:
+            return datetime.strptime(match.group(1), "%Y%m%d").strftime("%Y-%m-%d")
+        except:
+            return None
     return None
 
 def scrape_bottom_of_the_hill():
@@ -29,31 +25,27 @@ def scrape_bottom_of_the_hill():
         events = []
 
         for i, block in enumerate(event_blocks):
-            html = block.inner_html()
-            text = block.inner_text()
+            text = block.inner_text().strip()
+            img_el = block.query_selector("a[href$='.jpg'] > img")
+            date = None
 
-            # Date
-            date_el = block.query_selector("span.date")
-            if not date_el:
-                print(f"⚠️ [Block {i}] No date found")
-                continue
-            date_text = date_el.inner_text().strip()
-            print(f"📅 [Block {i}] Raw date: '{date_text}'")
-            date = normalize_date(date_text)
+            if img_el:
+                img_src = img_el.get_attribute("src")
+                date = extract_date_from_img_src(img_src)
+                print(f"📅 [Block {i}] Extracted date from img: {date}")
+            else:
+                print(f"⚠️ [Block {i}] No image found for date")
 
-            # Time (from text)
-            time_lines = [line.strip() for line in text.splitlines() if "door" in line.lower() or "music" in line.lower()]
-            show_time = time_lines[0] if time_lines else ""
-
-            # Bands
             band_els = block.query_selector_all("big.band")
             artists = [el.inner_text().strip().upper() for el in band_els]
             if not artists:
                 print(f"⚠️ [Block {i}] No artists found")
                 continue
 
-            # Combine artists into single string
             artist_string = ", ".join(artists)
+
+            time_lines = [line for line in text.splitlines() if "door" in line.lower() or "music" in line.lower()]
+            show_time = time_lines[0] if time_lines else ""
 
             events.append({
                 "artist": artist_string,

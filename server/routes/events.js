@@ -6,6 +6,7 @@ const Event = require('../models/Event');
 router.get('/', async (req, res) => {
   const filters = req.query;
   const query = {};
+
   if (filters.date) query.date = filters.date;
   if (filters.venue) query.venue = filters.venue;
   if (filters.artist) query.artist = { $regex: filters.artist, $options: 'i' };
@@ -14,7 +15,11 @@ router.get('/', async (req, res) => {
     const events = await Event.find(query);
     res.json(events);
   } catch (err) {
-    res.status(500).json({ message: "Error fetching events", error: err });
+    console.error('Error fetching events:', err); // Log actual error
+    res.status(500).json({
+      message: "Error fetching events",
+      error: err.message || "Unknown server error"
+    });
   }
 });
 
@@ -27,7 +32,10 @@ router.get('/test', async (req, res) => {
     res.json(events);
   } catch (err) {
     console.error("Test fetch error:", err);
-    res.status(500).json({ message: "Could not fetch events", error: err });
+    res.status(500).json({
+      message: "Could not fetch events",
+      error: err.message || "Unknown server error"
+    });
   }
 });
 
@@ -43,7 +51,10 @@ router.post('/', async (req, res) => {
     res.status(200).json({ message: 'Events saved', count: saved.length });
   } catch (err) {
     console.error('Insert error:', err);
-    res.status(500).json({ message: 'Failed to save events', error: err.message });
+    res.status(500).json({
+      message: 'Failed to save events',
+      error: err.message || "Unknown server error"
+    });
   }
 });
 

@@ -1,17 +1,12 @@
-
 from playwright.sync_api import sync_playwright
 import requests
-import re
 from datetime import datetime
 
-def normalize_date_from_img(src):
+def normalize_date(text):
     try:
-        match = re.search(r"/f/(\d{8})f\.jpg", src)
-        if match:
-            return datetime.strptime(match.group(1), "%Y%m%d").strftime("%Y-%m-%d")
+        return datetime.strptime(text.strip(), "%A %B %d %Y").strftime("%Y-%m-%d")
     except Exception:
-        pass
-    return None
+        return None
 
 def scrape_bottom_of_the_hill():
     with sync_playwright() as p:
@@ -26,30 +21,31 @@ def scrape_bottom_of_the_hill():
         events = []
 
         for i, block in enumerate(event_blocks):
-            img = block.query_selector("a > img")
-            if not img:
-                print(f"⚠️ [Block {i}] No image found for date")
-                continue
-
-            src = img.get_attribute("src")
-            date = normalize_date_from_img(src)
-            if not date:
-                print(f"⚠️ [Block {i}] Could not parse date from image src")
-                continue
-            else:
-                print(f"📅 [Block {i}] Extracted date from img: {date}")
-
-            text = block.inner_text()
-            time_lines = [line.strip() for line in text.splitlines() if "door" in line.lower() or "music" in line.lower()]
-            show_time = time_lines[0] if time_lines else ""
-
+            date_el = block.query_selector("span.date")
             band_els = block.query_selector_all("big.band")
-            artists = [el.inner_text().strip().upper() for el in band_els]
-            if not artists:
+
+            if not date_el:
+                print(f"⚠️ [Block {i}] No date found")
+                continue
+            if not band_els:
                 print(f"⚠️ [Block {i}] No artists found")
                 continue
 
+            # Parse date
+            date_text = date_el.inner_text().strip() + " 2025"
+            date = normalize_date(date_text)
+            if not date:
+                print(f"⚠️ [Block {i}] Could not parse date: '{date_text}'")
+                continue
+
+            # Parse bands
+            artists = [el.inner_text().strip().upper() for el in band_els]
             artist_string = ", ".join(artists)
+
+            # Extract time info
+            text = block.inner_text()
+            time_lines = [line.strip() for line in text.splitlines() if "door" in line.lower()]
+            show_time = time_lines[0] if time_lines else ""
 
             events.append({
                 "artist": artist_string,

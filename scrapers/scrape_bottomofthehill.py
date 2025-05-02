@@ -12,15 +12,6 @@ def extract_date_from_img_src(src: str):
             return None
     return None
 
-def extract_fallback_date(text: str):
-    match = re.search(r'([A-Z][a-z]+ \d{1,2},? 20\d{2})', text)
-    if match:
-        try:
-            return datetime.strptime(match.group(1).replace(',', ''), "%B %d %Y").strftime("%Y-%m-%d")
-        except:
-            return None
-    return None
-
 def scrape_bottom_of_the_hill():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
@@ -38,34 +29,29 @@ def scrape_bottom_of_the_hill():
             if len(tds) < 3:
                 continue
 
-            block = tds[2]  # Only the third column (event info)
+            block = tds[2]  # Only parse the third <td>
             style = block.get_attribute("style") or ""
             if "background-color: rgb(204, 204, 51)" not in style:
                 continue
 
-            text = block.inner_text().strip()
             img_el = block.query_selector("a[href$='.jpg'] > img")
-            date = None
+            if not img_el:
+                print(f"⚠️ [Block {i}] Skipping: No image found for date")
+                continue
 
-            if img_el:
-                img_src = img_el.get_attribute("src")
-                date = extract_date_from_img_src(img_src)
-                if date:
-                    print(f"📅 [Block {i}] Extracted date from img: {date}")
-                else:
-                    print(f"⚠️ [Block {i}] Image found but date couldn't be parsed")
-            else:
-                print(f"⚠️ [Block {i}] No image found for date")
-                date = extract_fallback_date(text)
-                if date:
-                    print(f"📅 [Block {i}] Fallback date extracted from text: {date}")
-                else:
-                    print(f"⚠️ [Block {i}] Could not extract date")
+            img_src = img_el.get_attribute("src")
+            date = extract_date_from_img_src(img_src)
+            if not date:
+                print(f"⚠️ [Block {i}] Skipping: Image found but date could not be parsed")
+                continue
 
+            print(f"📅 [Block {i}] Extracted date from img: {date}")
+
+            text = block.inner_text().strip()
             band_els = block.query_selector_all("big.band")
             artists = [el.inner_text().strip().upper() for el in band_els]
             if not artists:
-                print(f"⚠️ [Block {i}] No artists found")
+                print(f"⚠️ [Block {i}] Skipping: No artists found")
                 continue
 
             artist_string = ", ".join(artists)

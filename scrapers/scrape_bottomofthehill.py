@@ -12,6 +12,15 @@ def extract_date_from_img_src(src: str):
             return None
     return None
 
+def extract_fallback_date(text: str):
+    match = re.search(r'([A-Z][a-z]+ \d{1,2},? 20\d{2})', text)
+    if match:
+        try:
+            return datetime.strptime(match.group(1).replace(',', ''), "%B %d %Y").strftime("%Y-%m-%d")
+        except:
+            return None
+    return None
+
 def scrape_bottom_of_the_hill():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
@@ -19,46 +28,46 @@ def scrape_bottom_of_the_hill():
         print("⏳ Loading Bottom of the Hill page...")
         page.goto("https://www.bottomofthehill.com/calendar.html", timeout=60000)
 
-        rows = page.query_selector_all("tr")
-        print(f"✅ Found {len(rows)} table rows")
+        event_blocks = page.query_selector_all("td[style*='background-color: rgb(204, 204, 51)']")
+        print(f"✅ Found {len(event_blocks)} event blocks")
 
         events = []
 
-        for i, row in enumerate(rows):
-            tds = row.query_selector_all("td")
-            if len(tds) < 3:
-                continue
-
-            # Only process the third <td> in each row (index 2)
-            block = tds[2]
-            style = block.get_attribute("style") or ""
-            if "background-color: rgb(204, 204, 51)" not in style:
-                continue
-
+        for i, block in enumerate(event_blocks):
             text = block.inner_text().strip()
+
+            # Try to extract date from image if present
             img_el = block.query_selector("a[href$='.jpg'] > img")
-            if not img_el:
-                print(f"⚠️ [Block {i}] Skipping: No image found for date")
-                continue
+            date = None
+            if img_el:
+                img_src = img_el.get_attribute("src")
+                date = extract_date_from_img_src(img_src)
+                if date:
+                    print(f"📅 [Block {i}] Extracted date from img: {date}")
+                else:
+                    print(f"⚠️ [Block {i}] Image found but date couldn't be parsed")
+            else:
+                date = extract_fallback_date(text)
+                if date:
+                    print(f"📅 [Block {i}] Fallback date extracted from text: {date}")
+                else:
+                    print(f"⚠️ [Block {i}] Could not extract date")
 
-            img_src = img_el.get_attribute("src")
-            date = extract_date_from_img_src(img_src)
-            if not date:
-                print(f"⚠️ [Block {i}] Skipping: Image found but date could not be parsed")
-                continue
-
-            print(f"📅 [Block {i}] Extracted date from img: {date}")
-
+            # Extract artist(s)
             band_els = block.query_selector_all("big.band")
             artists = [el.inner_text().strip().upper() for el in band_els]
-            if not artists:
-                print(f"⚠️ [Block {i}] Skipping: No artists found")
-                continue
+            artist_string = ", ".join(artists) if artists else ""
 
-            artist_string = ", ".join(artists)
-
+            # Extract time info
             time_lines = [line for line in text.splitlines() if "door" in line.lower() or "music" in line.lower()]
             show_time = time_lines[0].replace('\xa0', ' ').strip() if time_lines else ""
+
+            # Only skip blocks that are *fully* empty
+            if not date and not artist_string and not show_time:
+                print(f"⚠️ [Block {i}] Skipping: No usable content found")
+                continue
+
+            print(f"✅ [Block {i}] Parsed event: {artist_string or 'N/A'} on {date or 'N/A'}")
 
             events.append({
                 "artist": artist_string,
@@ -67,8 +76,6 @@ def scrape_bottom_of_the_hill():
                 "venue": "Bottom of the Hill",
                 "link": "https://www.bottomofthehill.com/calendar.html"
             })
-
-            print(f"✅ [Block {i}] Parsed event: {artist_string} on {date}")
 
         print(events)
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import EventCard from '../components/EventCard';
+import EventCard from '../components/eventcard';
 import Filters from '../components/Filters';
 import Pagination from '../components/Pagination';
 import './eventsPage.css';

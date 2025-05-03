@@ -6,7 +6,7 @@ function EventCard({ artist, venue, date, time, link }) {
     <div className="event-card">
       <h2>{artist}</h2>
       <p><strong>{venue}</strong></p>
-      <p>{date} {time && `at ${time}`}</p>
+      <p>{date}{time ? ` at ${time}` : ''}</p>
       {link && (
         <a
           href={link}
@@ -20,3 +20,5 @@ function EventCard({ artist, venue, date, time, link }) {
     </div>
   );
 }
+
+export default eventcard;

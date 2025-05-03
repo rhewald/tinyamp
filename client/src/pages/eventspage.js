@@ -1,64 +1,67 @@
 import React, { useEffect, useState } from 'react';
-import EventCard from '../components/EventCard';
-import Filters from '../components/Filters';
-import Pagination from '../components/Pagination';
+import EventCard from '../components/eventcard';
+import Filters from '../components/filters';
+import Pagination from '../components/pagination';
 import './eventspage.css';
 
 function EventsPage() {
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
-  const [selectedVenues, setSelectedVenues] = useState([]);
+  const [selectedVenue, setSelectedVenue] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const eventsPerPage = 6;
+  const EVENTS_PER_PAGE = 10;
 
   useEffect(() => {
     fetch('https://tinyamp.onrender.com/api/events')
       .then(res => res.json())
       .then(data => {
-        const sorted = [...data].sort((a, b) => new Date(a.sortDate || a.date) - new Date(b.sortDate || b.date));
+        const sorted = data
+          .filter(e => e.sortDate)
+          .sort((a, b) => new Date(a.sortDate) - new Date(b.sortDate));
         setEvents(sorted);
         setFilteredEvents(sorted);
       });
   }, []);
 
-  const handleFilterChange = (venues, date) => {
-    setSelectedVenues(venues);
-    setSelectedDate(date);
+  useEffect(() => {
     const filtered = events.filter(event => {
-      const venueMatch = venues.length === 0 || venues.includes(event.venue);
-      const dateMatch = !date || (event.sortDate === date);
+      const venueMatch = selectedVenue ? event.venue === selectedVenue : true;
+      const dateMatch = selectedDate ? event.sortDate === selectedDate : true;
       return venueMatch && dateMatch;
     });
     setFilteredEvents(filtered);
     setCurrentPage(1);
-  };
+  }, [selectedVenue, selectedDate, events]);
 
-  const indexOfLastEvent = currentPage * eventsPerPage;
-  const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
-  const currentEvents = filteredEvents.slice(indexOfFirstEvent, indexOfLastEvent);
+  const start = (currentPage - 1) * EVENTS_PER_PAGE;
+  const currentEvents = filteredEvents.slice(start, start + EVENTS_PER_PAGE);
+  const venues = [...new Set(events.map(event => event.venue))];
 
   return (
     <div className="events-page">
-      <h1 className="header">🎶 tinyamp.live</h1>
-      <Filters events={events} onFilterChange={handleFilterChange} />
-      <div className="event-list">
-        {currentEvents.map(event => (
-          <EventCard
-            key={event._id}
-            artist={event.artist}
-            venue={event.venue}
-            date={event.date}
-            time={event.time}
-            link={event.link}
-          />
-        ))}
-      </div>
+      <h1 className="headline">🎶 tinyamp.live</h1>
+      <Filters
+        venues={venues}
+        selectedVenue={selectedVenue}
+        setSelectedVenue={setSelectedVenue}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+      />
+      {currentEvents.map(event => (
+        <EventCard
+          key={event._id}
+          artist={event.artist}
+          venue={event.venue}
+          date={event.date}
+          time={event.time}
+          link={event.link}
+        />
+      ))}
       <Pagination
-        totalEvents={filteredEvents.length}
-        eventsPerPage={eventsPerPage}
         currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
+        totalPages={Math.ceil(filteredEvents.length / EVENTS_PER_PAGE)}
+        onPageChange={setCurrentPage}
       />
     </div>
   );

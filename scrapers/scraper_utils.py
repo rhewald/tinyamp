@@ -44,7 +44,7 @@ def insert_unique_events(events, db_name="tinyamp", collection_name="events", ur
         return
 
     client = MongoClient(uri)
-    db = client[db_name]
+    db = client["tinyamp"]
     collection = db[collection_name]
 
     inserted = 0

@@ -63,4 +63,4 @@ function EventsPage() {
   );
 }
 
-export default eventspage;
+export default EventsPage;

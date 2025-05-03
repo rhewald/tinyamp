@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import EventCard from '../components/eventcard';
-import Filters from '../components/Filters';
-import Pagination from '../components/Pagination';
-import './eventsPage.css';
+import Filters from '../components/filters';
+import Pagination from '../components/pagination';
+import './eventspage.css';
 
 function EventsPage() {
   const [events, setEvents] = useState([]);
@@ -63,4 +63,4 @@ function EventsPage() {
   );
 }
 
-export default EventsPage;
+export default eventspage;

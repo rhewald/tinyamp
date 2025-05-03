@@ -1,0 +1,18 @@
+.filters {
+  display: flex;
+  justify-content: space-between;
+  background: #111;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  color: #ddd;
+}
+.filters label {
+  margin-right: 0.5rem;
+}
+.filters select, .filters input[type="date"] {
+  background: #222;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 0.5rem;
+}

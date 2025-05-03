@@ -21,4 +21,4 @@ function Filters({ venues, selectedVenues, onVenueChange, dateRange, onDateChang
   );
 }
 
-export default Filters;
+export default filters;

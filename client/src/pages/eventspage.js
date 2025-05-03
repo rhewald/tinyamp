@@ -1,67 +1,63 @@
 import React, { useEffect, useState } from 'react';
-import EventCard from '../components/eventcard';
-import Filters from '../components/filters';
-import Pagination from '../components/pagination';
-import './eventspage.css';
+import EventCard from '../components/EventCard';
+import Filters from '../components/Filters';
+import Pagination from '../components/Pagination';
+import './eventsPage.css';
 
 function EventsPage() {
   const [events, setEvents] = useState([]);
-  const [filteredEvents, setFilteredEvents] = useState([]);
-  const [selectedVenue, setSelectedVenue] = useState('');
+  const [filtered, setFiltered] = useState([]);
+  const [venues, setVenues] = useState([]);
+  const [selectedVenues, setSelectedVenues] = useState([]);
   const [selectedDate, setSelectedDate] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const EVENTS_PER_PAGE = 10;
+  const [page, setPage] = useState(1);
+  const perPage = 10;
 
   useEffect(() => {
     fetch('https://tinyamp.onrender.com/api/events')
       .then(res => res.json())
       .then(data => {
-        const sorted = data
-          .filter(e => e.sortDate)
-          .sort((a, b) => new Date(a.sortDate) - new Date(b.sortDate));
+        const sorted = data.sort((a, b) => new Date(a.sortDate) - new Date(b.sortDate));
         setEvents(sorted);
-        setFilteredEvents(sorted);
+        setFiltered(sorted);
+        setVenues([...new Set(sorted.map(ev => ev.venue))]);
       });
   }, []);
 
   useEffect(() => {
-    const filtered = events.filter(event => {
-      const venueMatch = selectedVenue ? event.venue === selectedVenue : true;
-      const dateMatch = selectedDate ? event.sortDate === selectedDate : true;
-      return venueMatch && dateMatch;
-    });
-    setFilteredEvents(filtered);
-    setCurrentPage(1);
-  }, [selectedVenue, selectedDate, events]);
+    let filteredData = [...events];
+    if (selectedVenues.length > 0) {
+      filteredData = filteredData.filter(ev => selectedVenues.includes(ev.venue));
+    }
+    if (selectedDate) {
+      filteredData = filteredData.filter(ev => ev.sortDate === selectedDate);
+    }
+    setFiltered(filteredData);
+    setPage(1);
+  }, [selectedVenues, selectedDate]);
 
-  const start = (currentPage - 1) * EVENTS_PER_PAGE;
-  const currentEvents = filteredEvents.slice(start, start + EVENTS_PER_PAGE);
-  const venues = [...new Set(events.map(event => event.venue))];
+  const paginatedEvents = filtered.slice((page - 1) * perPage, page * perPage);
 
   return (
     <div className="events-page">
-      <h1 className="headline">🎶 tinyamp.live</h1>
+      <h1>🎶 tinyamp.live</h1>
       <Filters
         venues={venues}
-        selectedVenue={selectedVenue}
-        setSelectedVenue={setSelectedVenue}
+        selectedVenues={selectedVenues}
+        setSelectedVenues={setSelectedVenues}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
       />
-      {currentEvents.map(event => (
-        <EventCard
-          key={event._id}
-          artist={event.artist}
-          venue={event.venue}
-          date={event.date}
-          time={event.time}
-          link={event.link}
-        />
-      ))}
+      <div className="event-grid">
+        {paginatedEvents.map(event => (
+          <EventCard key={event._id} {...event} />
+        ))}
+      </div>
       <Pagination
-        currentPage={currentPage}
-        totalPages={Math.ceil(filteredEvents.length / EVENTS_PER_PAGE)}
-        onPageChange={setCurrentPage}
+        page={page}
+        total={filtered.length}
+        perPage={perPage}
+        setPage={setPage}
       />
     </div>
   );

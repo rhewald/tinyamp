@@ -1,0 +1,26 @@
+run = "python run_tinyamp.py"
+
+[packager]
+language = "python3"
+[packager.features]
+enabledForHosting = false
+# Search packages in PyPI.
+packageSearch = true
+# Package manager is currently experimental: set enabled to true to try it out!
+guessImports = true
+
+[env]
+VIRTUAL_ENV = "/home/runner/${REPL_SLUG}/venv"
+PATH = "${VIRTUAL_ENV}/bin"
+PYTHONPATH = "$PYTHONHOME/lib/python3.10:${VIRTUAL_ENV}/lib/python3.10/site-packages"
+
+[languages.python3]
+pattern = "**/*.py"
+[languages.python3.languageServer]
+start = "pylsp"
+
+[nix]
+channel = "stable-23_11"
+
+[deployment]
+run = ["sh", "-c", "python run_tinyamp.py"]

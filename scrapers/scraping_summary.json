@@ -1,0 +1,11 @@
+{
+  "scraping_timestamp": "2025-07-28_19-32-08",
+  "total_venues": 4,
+  "total_events": 195,
+  "venues": {
+    "The Chapel": 15,
+    "The Independent": 98,
+    "Great American Music Hall": 12,
+    "Bottom of the Hill": 70
+  }
+}

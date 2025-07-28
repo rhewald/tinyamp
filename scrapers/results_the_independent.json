@@ -1,0 +1,884 @@
+[
+  {
+    "artist": "JUTES",
+    "date": "2026-07-28",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/jutes/",
+    "raw_date": "7.28",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "EKKSTACY",
+    "date": "2025-07-30",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/ekkstacy/",
+    "raw_date": "7.30",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "JANE WICKLINE & LIVA PIERCE PRESENT: DUKES",
+    "date": "2025-07-31",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/jane-wickline-liva-pierce-present-dukes/",
+    "raw_date": "7.31",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "ISAIAH FALLS",
+    "date": "2025-08-01",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/isaiah-falls/",
+    "raw_date": "8.1",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "MANSIONAIR",
+    "date": "2025-08-02",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/mansionair/",
+    "raw_date": "8.2",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "GIMME GIMME DISCO",
+    "date": "2025-08-02",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/gimme-gimme-disco-2/",
+    "raw_date": "8.2",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "MAYE",
+    "date": "2025-08-05",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/maye/",
+    "raw_date": "8.5",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "LUIGI: THE MUSICAL",
+    "date": "2025-08-06",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/luigi-the-musical-5/",
+    "raw_date": "8.6",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "STILL WOOZY",
+    "date": "2025-08-07",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/still-woozy/",
+    "raw_date": "8.7",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "THUNDERCAT",
+    "date": "2025-08-08",
+    "time": "SHOW: 10:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/thundercat/",
+    "raw_date": "8.8",
+    "raw_time": "SHOW: 10:00 PM"
+  },
+  {
+    "artist": "BLOND:ISH",
+    "date": "2025-08-09",
+    "time": "SHOW: 10:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/blondish/",
+    "raw_date": "8.9",
+    "raw_time": "SHOW: 10:00 PM"
+  },
+  {
+    "artist": "HOPE TALA & LUNA LI",
+    "date": "2025-08-10",
+    "time": "SHOW: 10:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/hope-tala-luna-li/",
+    "raw_date": "8.10",
+    "raw_time": "SHOW: 10:00 PM"
+  },
+  {
+    "artist": "MOLLY SANTANA",
+    "date": "2025-08-12",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/molly-santana/",
+    "raw_date": "8.12",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "KYLE MOONEY: THE REAL ME / FAKE ME TOUR",
+    "date": "2025-08-13",
+    "time": "SHOW: 7:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/kyle-mooney-the-real-me-fake-me-tour/",
+    "raw_date": "8.13",
+    "raw_time": "SHOW: 7:00 PM"
+  },
+  {
+    "artist": "TWO ANOTHER",
+    "date": "2025-08-14",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/two-another/",
+    "raw_date": "8.14",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "MADELINE KENNEY",
+    "date": "2025-08-15",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/madeline-kenney/",
+    "raw_date": "8.15",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "THE SAM CHASE & THE UNTRADITIONAL",
+    "date": "2025-08-16",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/the-sam-chase-the-untraditional/",
+    "raw_date": "8.16",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "MAE POWELL",
+    "date": "2025-08-21",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/mae-powell/",
+    "raw_date": "8.21",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "ROCCO",
+    "date": "2025-08-22",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/rocco/",
+    "raw_date": "8.22",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "WESGHOST",
+    "date": "2025-08-24",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/wesghost/",
+    "raw_date": "8.24",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "KYLE DION",
+    "date": "2025-08-27",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/kyle-dion/",
+    "raw_date": "8.27",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "JESSE DANIEL",
+    "date": "2025-08-28",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/jesse-daniel/",
+    "raw_date": "8.28",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "CARDINAL BLACK",
+    "date": "2025-08-29",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/cardinal-black/",
+    "raw_date": "8.29",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "THE EMO NIGHT TOUR",
+    "date": "2025-08-30",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/the-emo-night-tour-4/",
+    "raw_date": "8.30",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "MEHRO",
+    "date": "2025-09-05",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/mehro/",
+    "raw_date": "9.5",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "JENNY HVAL",
+    "date": "2025-09-06",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/jenny-hval/",
+    "raw_date": "9.6",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "LA MISA NEGRA",
+    "date": "2025-09-06",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/la-misa-negra/",
+    "raw_date": "9.6",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "SIERRA HULL",
+    "date": "2025-09-10",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/sierra-hull/",
+    "raw_date": "9.10",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "RAY AND PAUL",
+    "date": "2025-09-12",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/ray-and-paul/",
+    "raw_date": "9.12",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "BILLIE MARTEN",
+    "date": "2025-09-13",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/billie-marten/",
+    "raw_date": "9.13",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "HOT FLASH HEAT WAVE & MIND\u2019S EYE",
+    "date": "2025-09-14",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/hot-flash-heat-wave-minds-eye/",
+    "raw_date": "9.14",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "ARCY DRIVE",
+    "date": "2025-09-15",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/arcy-drive/",
+    "raw_date": "9.15",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "DARIUS",
+    "date": "2025-09-16",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/darius/",
+    "raw_date": "9.16",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "NORTH MISSISSIPPI ALLSTARS",
+    "date": "2025-09-19",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/north-mississippi-allstars/",
+    "raw_date": "9.19",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "ANELLA",
+    "date": "2025-09-20",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/anella/",
+    "raw_date": "9.20",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "THE SYMPOSIUM",
+    "date": "2025-09-21",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/the-symposium/",
+    "raw_date": "9.21",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "THE RAVEONETTES",
+    "date": "2025-09-22",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/the-raveonettes/",
+    "raw_date": "9.22",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "THE MURDER CAPITAL",
+    "date": "2025-09-25",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/the-murder-capital/",
+    "raw_date": "9.25",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "YAYA BEY",
+    "date": "2025-09-26",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/yaya-bey/",
+    "raw_date": "9.26",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "DAVID ARCHULETA",
+    "date": "2025-09-27",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/david-archuleta/",
+    "raw_date": "9.27",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "DUCKWRTH \u2013 ALL AMERICAN FREAK SHOW TOUR",
+    "date": "2025-09-29",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/duckwrth/",
+    "raw_date": "9.29",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "10 YEARS",
+    "date": "2025-09-30",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/10-years/",
+    "raw_date": "9.30",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "GAVIN JAMES",
+    "date": "2025-10-01",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/gavin-james/",
+    "raw_date": "10.1",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "NOURISHED BY TIME",
+    "date": "2025-10-02",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/nourished-by-time/",
+    "raw_date": "10.2",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "DIGGIN\u2019 DIRT",
+    "date": "2025-10-03",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/diggin-dirt/",
+    "raw_date": "10.3",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "MODEL/ACTRIZ",
+    "date": "2025-10-04",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/model-actriz/",
+    "raw_date": "10.4",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "COCHISE",
+    "date": "2025-10-05",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/cochise/",
+    "raw_date": "10.5",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "NIGHT TAPES",
+    "date": "2025-10-07",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/night-tapes/",
+    "raw_date": "10.7",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "M\u00daM",
+    "date": "2025-10-08",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/mum/",
+    "raw_date": "10.8",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "JEREMY JORDAN & AGE OF MADNESS",
+    "date": "2025-10-09",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/age-of-madness/",
+    "raw_date": "10.9",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "BALU BRIGADA",
+    "date": "2025-10-10",
+    "time": "SHOW: 6:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/balu-brigada-2/",
+    "raw_date": "10.10",
+    "raw_time": "SHOW: 6:00 PM"
+  },
+  {
+    "artist": "BALU BRIGADA",
+    "date": "2025-10-10",
+    "time": "SHOW: 10:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/balu-brigada/",
+    "raw_date": "10.10",
+    "raw_time": "SHOW: 10:00 PM"
+  },
+  {
+    "artist": "RIVAL SCHOOLS & NARROW HEAD",
+    "date": "2025-10-12",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/rival-schools-narrow-head/",
+    "raw_date": "10.12",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "ODDISEE",
+    "date": "2025-10-13",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/oddisee/",
+    "raw_date": "10.13",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "JAMES VICKERY",
+    "date": "2025-10-14",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/james-vickery/",
+    "raw_date": "10.14",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "COVET",
+    "date": "2025-10-15",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/covet/",
+    "raw_date": "10.15",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "JOHNNY STIMSON",
+    "date": "2025-10-16",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/johnny-stimson/",
+    "raw_date": "10.16",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "DURRY",
+    "date": "2025-10-17",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/durry/",
+    "raw_date": "10.17",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "OLIVER HAZARD X THE LAST REVEL: HEAD WEST",
+    "date": "2025-10-18",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/oliver-hazard-x-the-last-revel/",
+    "raw_date": "10.18",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "ISABELLA LOVESTORY",
+    "date": "2025-10-19",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/isabella-lovestory/",
+    "raw_date": "10.19",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "THE WALTERS",
+    "date": "2025-10-19",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/the-walters/",
+    "raw_date": "10.19",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "AIDAN BISSETT",
+    "date": "2025-10-20",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/aidan-bissett/",
+    "raw_date": "10.20",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "SUPERCHUNK",
+    "date": "2025-10-21",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/superchunk/",
+    "raw_date": "10.21",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "THE ARMY, THE NAVY",
+    "date": "2025-10-23",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/the-army-the-navy/",
+    "raw_date": "10.23",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "FROST CHILDREN",
+    "date": "2025-10-24",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/frost-children/",
+    "raw_date": "10.24",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "OKLOU",
+    "date": "2025-10-25",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/oklou/",
+    "raw_date": "10.25",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "QUINNIE",
+    "date": "2025-10-26",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/quinnie-the-paper-doll-tour/",
+    "raw_date": "10.26",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "KNEECAP",
+    "date": "2025-10-27",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/kneecap/",
+    "raw_date": "10.27",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "KNEECAP \u2013 MOVED TO THE FOX THEATER",
+    "date": "2025-10-28",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/kneecap-moved-to-the-fox-theater/",
+    "raw_date": "10.28",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "WATER FROM YOUR EYES",
+    "date": "2025-10-29",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/water-from-your-eyes/",
+    "raw_date": "10.29",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "WILLI CARLISLE",
+    "date": "2025-10-30",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/willi-carlisle/",
+    "raw_date": "10.30",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "FELLY",
+    "date": "2025-11-01",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/felly/",
+    "raw_date": "11.1",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "GOOD NEIGHBOURS",
+    "date": "2025-11-05",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/good-neighbours/",
+    "raw_date": "11.5",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "ETHAN REGAN",
+    "date": "2025-11-07",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/ethan-regan/",
+    "raw_date": "11.7",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "PETE YORN \u2013 YOU AND ME SOLO ACCOUSTIC",
+    "date": "2025-11-09",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/pete-yorn-me-and-you-solo-accoustic/",
+    "raw_date": "11.9",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "WAYLON WYATT",
+    "date": "2025-11-10",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/waylon-wyatt/",
+    "raw_date": "11.10",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "HOME IS WHERE",
+    "date": "2025-11-11",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/home-is-where/",
+    "raw_date": "11.11",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "SMALLPOOLS",
+    "date": "2025-11-14",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/smallpools/",
+    "raw_date": "11.14",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "YAELOKRE",
+    "date": "2025-11-16",
+    "time": "SHOW: 4:30 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/yaelokre-2/",
+    "raw_date": "11.16",
+    "raw_time": "SHOW: 4:30 PM"
+  },
+  {
+    "artist": "YAELOKRE",
+    "date": "2025-11-16",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/yaelokre/",
+    "raw_date": "11.16",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "MADI DIAZ",
+    "date": "2025-11-18",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/madi-diaz/",
+    "raw_date": "11.18",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "JOEL SUNNY",
+    "date": "2025-11-19",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/joel-sunny/",
+    "raw_date": "11.19",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "TEI SHI",
+    "date": "2025-11-20",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/tei-shi/",
+    "raw_date": "11.20",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "DARGZ",
+    "date": "2025-11-22",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/dargz/",
+    "raw_date": "11.22",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "FLAMINGOSIS",
+    "date": "2025-11-28",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/flamingosis/",
+    "raw_date": "11.28",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "JENS LEKMAN",
+    "date": "2025-11-30",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/jens-lekman/",
+    "raw_date": "11.30",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "VINCENT LIMA",
+    "date": "2025-12-02",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/vincent-lima/",
+    "raw_date": "12.2",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "ANNA OF THE NORTH",
+    "date": "2025-12-03",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/anna-of-the-north/",
+    "raw_date": "12.3",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "SYDNEY ROSE",
+    "date": "2025-12-04",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/sydney-rose/",
+    "raw_date": "12.4",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "FOXWARREN",
+    "date": "2025-12-09",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/foxwarren/",
+    "raw_date": "12.9",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "POST ANIMAL",
+    "date": "2025-12-10",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/post-animal/",
+    "raw_date": "12.10",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "THE FRIGHTS",
+    "date": "2025-12-12",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/the-frights/",
+    "raw_date": "12.12",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "LUVCAT",
+    "date": "2025-12-13",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/luvcat/",
+    "raw_date": "12.13",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "REJJIE SNOW",
+    "date": "2025-12-14",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/rejjie-snow/",
+    "raw_date": "12.14",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "XAVIER OM\u00c4R",
+    "date": "2025-12-20",
+    "time": "SHOW: 9:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/xavier-omar/",
+    "raw_date": "12.20",
+    "raw_time": "SHOW: 9:00 PM"
+  },
+  {
+    "artist": "YSEULT",
+    "date": "2026-01-27",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/yseult/",
+    "raw_date": "1.27",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "RUSTON KELLY",
+    "date": "2026-02-02",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/ruston-kelly/",
+    "raw_date": "2.2",
+    "raw_time": "SHOW: 8:00 PM"
+  },
+  {
+    "artist": "ODEZENNE",
+    "date": "2026-02-18",
+    "time": "SHOW: 8:00 PM",
+    "venue": "The Independent",
+    "link": "https://www.theindependentsf.com/tm-event/odezenne/",
+    "raw_date": "2.18",
+    "raw_time": "SHOW: 8:00 PM"
+  }
+]

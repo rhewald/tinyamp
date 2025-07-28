@@ -14,7 +14,7 @@ from enhanced_scraper_utils import (
     logger
 )
 
-def scrape_chapel_events():
+def scrape_chapel_events_enhanced():
     """Enhanced Chapel scraper with multiple selectors and better error handling"""
     venue_name = "The Chapel"
     events = []
@@ -57,10 +57,14 @@ def scrape_chapel_events():
     validated_events = validate_event_data(events, venue_name)
     
     # Print results
+    print(f"\n=== {venue_name} Events ===")
+    print(f"Raw events found: {len(events)}")
+    print(f"Valid events: {len(validated_events)}")
     print(json.dumps(validated_events, indent=2))
     
     # Insert into database
     result = insert_unique_events_enhanced(validated_events, venue_name)
+    print(f"\nDatabase result: {result}")
     
     return validated_events
 
@@ -129,7 +133,9 @@ def extract_chapel_event_data(scraper: EnhancedScraper, event_element, index: in
         "date": normalized_date,
         "time": normalize_time_enhanced(time_info),
         "venue": "The Chapel",
-        "link": link
+        "link": link,
+        "raw_date": raw_date,
+        "raw_time": time_info
     }
 
 
@@ -180,4 +186,4 @@ def extract_chapel_time_info(event_element) -> str:
 
 
 if __name__ == "__main__":
-    scrape_chapel_events()
+    scrape_chapel_events_enhanced()
